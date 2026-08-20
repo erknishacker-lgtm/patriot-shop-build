@@ -177,17 +177,6 @@ export function ProductInfo(props: Props) {
         </ul>
       </div>
 
-      <div className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-4">
-        <div>
-          <p className="mb-2 text-sm font-semibold text-foreground">Quantidade</p>
-          <QuantitySelector value={quantity} onChange={setQuantity} />
-        </div>
-        <div className="min-w-0 text-right">
-          <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Total</p>
-          <p className="truncate text-xl font-bold text-brand-deep">{formatBRL(total)}</p>
-        </div>
-      </div>
-
       <div className="rounded-xl border border-border bg-surface p-4">
         <p className="flex items-center gap-2 text-sm font-semibold text-brand-deep">
           <Lock className="size-4 text-brand" aria-hidden="true" />
