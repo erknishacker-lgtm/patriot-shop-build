@@ -98,6 +98,14 @@ export function ProductInfo(props: Props) {
         oldPrice={oldUnitPrice}
         pixDiscount={product.pixDiscount}
         maxInstallments={product.maxInstallments}
+        quantitySelector={
+          <div className="flex flex-col gap-1">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-foreground">
+              Quantidade
+            </span>
+            <QuantitySelector value={quantity} onChange={setQuantity} />
+          </div>
+        }
       />
 
       <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
