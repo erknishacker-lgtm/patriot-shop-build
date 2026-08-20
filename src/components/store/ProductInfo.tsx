@@ -98,33 +98,33 @@ export function ProductInfo(props: Props) {
         oldPrice={oldUnitPrice}
         pixDiscount={product.pixDiscount}
         maxInstallments={product.maxInstallments}
+        quantitySelector={
+          <div className="flex flex-col gap-1">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-foreground">
+              Quantidade
+            </span>
+            <QuantitySelector value={quantity} onChange={setQuantity} />
+          </div>
+        }
       />
 
-      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
-        <div className="min-w-0">
-          <div className="flex items-baseline gap-2">
-            <h2 className="text-[11px] font-semibold uppercase tracking-wider text-foreground">
-              Tamanho
-            </h2>
-            <SizeChartDialog rows={product.sizeChart} />
-          </div>
-          <div className="mt-1.5">
-            <SizeSelector
-              sizes={product.sizes}
-              selected={selectedSize}
-              error={showSizeError}
-              onSelect={(size) => {
-                setSelectedSize(size);
-                setShowSizeError(false);
-              }}
-            />
-          </div>
+      <div>
+        <div className="flex items-baseline gap-2">
+          <h2 className="text-[11px] font-semibold uppercase tracking-wider text-foreground">
+            Tamanho
+          </h2>
+          <SizeChartDialog rows={product.sizeChart} />
         </div>
-        <div>
-          <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground">
-            Quantidade
-          </p>
-          <QuantitySelector value={quantity} onChange={setQuantity} />
+        <div className="mt-1.5">
+          <SizeSelector
+            sizes={product.sizes}
+            selected={selectedSize}
+            error={showSizeError}
+            onSelect={(size) => {
+              setSelectedSize(size);
+              setShowSizeError(false);
+            }}
+          />
         </div>
       </div>
 
