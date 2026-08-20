@@ -11,7 +11,7 @@ type Props = {
   action?: ReactNode;
 };
 
-export function PriceBlock({ price, oldPrice, pixDiscount, maxInstallments }: Props) {
+export function PriceBlock({ price, oldPrice, pixDiscount, maxInstallments, action }: Props) {
   const discount = oldPrice ? Math.round((1 - price / oldPrice) * 100) : 0;
   const pixPrice = price * (1 - pixDiscount);
   const installment = price / maxInstallments;
