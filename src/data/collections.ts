@@ -1,4 +1,4 @@
-import img1 from "@/assets/camiseta-1.jpg";
+import img1 from "@/assets/mitinho-4.png.asset.json";
 
 export type CollectionProduct = {
   id: string;
@@ -18,8 +18,8 @@ export const bestSellers: CollectionProduct[] = [
   {
     id: "camiseta-clube-bolsonaro",
     name: "Camiseta Clube Bolsonaro - #Mitinho",
-    image: img1,
-    alt: "Camiseta Clube Bolsonaro verde vista de frente",
+    image: img1.url,
+    alt: "Camiseta amarela Clube Bolsonaro #Mitinho",
     price: 89.9,
     oldPrice: 119.9,
     maxInstallments: 12,
