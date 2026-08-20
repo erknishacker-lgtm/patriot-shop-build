@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Expand } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
@@ -99,14 +99,6 @@ export function ProductGallery({ images, title }: { images: GalleryImage[]; titl
               alt={current.alt}
               className="max-h-[75vh] w-full rounded-xl object-contain"
             />
-            <button
-              type="button"
-              onClick={() => setLightbox(false)}
-              aria-label="Fechar"
-              className="absolute right-2 top-2 grid size-9 place-items-center rounded-full bg-background/90 shadow-sm"
-            >
-              <X className="size-4" />
-            </button>
             <div className="mt-3 flex items-center justify-center gap-3">
               <button
                 type="button"
