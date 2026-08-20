@@ -21,6 +21,7 @@ import { ShareMenu } from "./ShareMenu";
 import { ShippingCalculator } from "./ShippingCalculator";
 import { SizeChartDialog } from "./SizeChartDialog";
 import { SizeSelector } from "./SizeSelector";
+import { YampiBuyButton } from "./YampiBuyButton";
 
 
 type Props = ReturnType<typeof useProduct>;
@@ -138,6 +139,9 @@ export function ProductInfo(props: Props) {
         {loading ? "PROCESSANDO..." : added ? "REDIRECIONANDO..." : "COMPRAR AGORA"}
 
       </Button>
+
+      <YampiBuyButton className="w-full" />
+
 
       <ul className="grid gap-0.5 overflow-hidden rounded-lg border border-border bg-card p-1 sm:grid-cols-3">
         {[
