@@ -205,6 +205,8 @@ export function ProductInfo(props: Props) {
         </ul>
       </div>
 
+      <ShippingCalculator compact />
+
       <div className="flex gap-3">
         <Button
           variant="outline"
