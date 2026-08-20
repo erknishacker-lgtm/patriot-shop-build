@@ -60,6 +60,12 @@ export function PriceBlock({ price, oldPrice, pixDiscount, maxInstallments, acti
         </span>
       </div>
 
+      {quantitySelector && (
+        <div className="flex items-center gap-3 pt-0.5">
+          {quantitySelector}
+        </div>
+      )}
+
       {action && <div className="pt-1">{action}</div>}
     </div>
   );
