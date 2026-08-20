@@ -3,11 +3,9 @@ import {
   Banknote,
   Check,
   CreditCard,
-  FileText,
   Heart,
-  Loader2,
-  Lock,
-  QrCode,
+  Loader2 as Spinner,
+  RotateCcw,
   ShieldCheck,
   ShoppingCart,
   Truck,
@@ -79,14 +77,14 @@ export function ProductInfo(props: Props) {
   const oldUnitPrice = product.oldPrice ? product.oldPrice + sizeExtra : null;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <div>
         {product.badge && (
-          <span className="inline-flex items-center rounded-md bg-gold px-2.5 py-1 text-[11px] font-bold tracking-[0.14em] text-gold-foreground">
+          <span className="inline-flex items-center rounded-md bg-gold px-2 py-0.5 text-[10px] font-bold tracking-[0.14em] text-gold-foreground">
             {product.badge}
           </span>
         )}
-        <h1 className="mt-3 font-display text-2xl font-extrabold leading-tight text-brand-deep sm:text-3xl lg:text-[2.25rem]">
+        <h1 className="mt-2 font-display text-xl font-extrabold leading-snug text-brand-deep sm:text-2xl">
           {product.name}
         </h1>
         <ProductRating
@@ -94,39 +92,8 @@ export function ProductInfo(props: Props) {
             product.reviews.reduce((sum, r) => sum + r.rating, 0) / product.reviews.length
           }
           reviewCount={product.reviews.length}
-          className="mt-3"
+          className="mt-1.5"
         />
-      </div>
-
-      <div className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-4">
-        <div>
-          <p className="mb-2 text-sm font-semibold text-foreground">Quantidade</p>
-          <QuantitySelector value={quantity} onChange={setQuantity} />
-        </div>
-        <div className="min-w-0 text-right">
-          <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Total</p>
-          <p className="truncate text-xl font-bold text-brand-deep">{formatBRL(total)}</p>
-        </div>
-      </div>
-
-      <div>
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-foreground">
-            Escolha seu tamanho
-          </h2>
-          <SizeChartDialog rows={product.sizeChart} />
-        </div>
-        <div className="mt-2">
-          <SizeSelector
-            sizes={product.sizes}
-            selected={selectedSize}
-            error={showSizeError}
-            onSelect={(size) => {
-              setSelectedSize(size);
-              setShowSizeError(false);
-            }}
-          />
-        </div>
       </div>
 
       <PriceBlock
@@ -134,66 +101,72 @@ export function ProductInfo(props: Props) {
         oldPrice={oldUnitPrice}
         pixDiscount={product.pixDiscount}
         maxInstallments={product.maxInstallments}
-        action={
-          <Button
-            id="cta-add-cart"
-            variant="brand"
-            size="xl"
-            className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
-            onClick={() => void handleAddToCart()}
-            disabled={loading}
-          >
-            {loading ? (
-              <Loader2 className="animate-spin" />
-            ) : added ? (
-              <Check className="animate-in zoom-in" />
-            ) : (
-              <ShoppingCart />
-            )}
-            {loading ? "ADICIONANDO..." : added ? "ADICIONADO!" : "ADICIONAR AO CARRINHO"}
-          </Button>
-        }
       />
 
-      <div className="rounded-xl border border-border bg-card p-4">
-        <p className="flex items-center gap-2 text-sm font-semibold text-brand-deep">
-          <Truck className="size-4 text-brand" aria-hidden="true" />
-          Envio para todo o Brasil
-        </p>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Despacho rápido após confirmação do pagamento.
-        </p>
-        <ul className="mt-3 grid gap-1.5 text-xs text-muted-foreground sm:grid-cols-2">
-          {[
-            { Icon: ShieldCheck, label: "Compra segura" },
-            { Icon: FileText, label: "Produto com Nota Fiscal" },
-            { Icon: Truck, label: "Envio para todo o Brasil" },
-          ].map(({ Icon, label }) => (
-            <li key={label} className="flex items-center gap-2">
-              <Icon className="size-3.5 shrink-0 text-brand" aria-hidden="true" />
-              {label}
-            </li>
-          ))}
-        </ul>
+      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+        <div className="min-w-0">
+          <div className="flex items-baseline gap-2">
+            <h2 className="text-[11px] font-semibold uppercase tracking-wider text-foreground">
+              Tamanho
+            </h2>
+            <SizeChartDialog rows={product.sizeChart} />
+          </div>
+          <div className="mt-1.5">
+            <SizeSelector
+              sizes={product.sizes}
+              selected={selectedSize}
+              error={showSizeError}
+              onSelect={(size) => {
+                setSelectedSize(size);
+                setShowSizeError(false);
+              }}
+            />
+          </div>
+        </div>
+        <div>
+          <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground">
+            Quantidade
+          </p>
+          <QuantitySelector value={quantity} onChange={setQuantity} />
+        </div>
       </div>
 
-      <div className="rounded-xl border border-border bg-surface p-4">
-        <p className="flex items-center gap-2 text-sm font-semibold text-brand-deep">
-          <Lock className="size-4 text-brand" aria-hidden="true" />
-          Compra segura e protegida
+      <Button
+        id="cta-add-cart"
+        variant="brand"
+        size="xl"
+        className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
+        onClick={() => void handleAddToCart()}
+        disabled={loading}
+      >
+        {loading ? (
+          <Spinner className="animate-spin" />
+        ) : added ? (
+          <Check className="animate-in zoom-in" />
+        ) : (
+          <ShoppingCart />
+        )}
+        {loading ? "ADICIONANDO..." : added ? "ADICIONADO!" : "ADICIONAR AO CARRINHO"}
+      </Button>
+
+      <p className="text-center text-xs text-muted-foreground">
+        Total: <span className="font-bold text-brand-deep">{formatBRL(total)}</span>
+      </p>
+
+      <div className="overflow-hidden rounded-xl border border-border">
+        <p className="flex items-center justify-center gap-2 border-b border-border bg-surface px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+          <CreditCard className="size-3.5" aria-hidden="true" />
+          Formas de pagamento
         </p>
-        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-          Seus dados são tratados com segurança durante todo o processo de compra.
-        </p>
-        <ul className="mt-3 flex flex-wrap gap-2">
+        <ul className="flex flex-wrap items-center justify-center gap-2 bg-card px-3 py-3">
           {[
             { Icon: CreditCard, label: "Cartão" },
-            { Icon: QrCode, label: "Pix" },
             { Icon: Banknote, label: "Boleto" },
+            { Icon: ShieldCheck, label: "Pix" },
           ].map(({ Icon, label }) => (
             <li
               key={label}
-              className="flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-[11px] font-semibold text-muted-foreground"
+              className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-[11px] font-semibold text-muted-foreground"
             >
               <Icon className="size-3.5" aria-hidden="true" />
               {label}
@@ -201,6 +174,34 @@ export function ProductInfo(props: Props) {
           ))}
         </ul>
       </div>
+
+      <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
+        {[
+          {
+            Icon: ShieldCheck,
+            title: "Pagamentos e informações estão seguros",
+            text: "Site oficial com todos os direitos reservados.",
+          },
+          {
+            Icon: Truck,
+            title: "Envio para todo o Brasil",
+            text: "Despacho rápido após a confirmação do pagamento, com código de rastreio.",
+          },
+          {
+            Icon: RotateCcw,
+            title: "Devoluções facilitadas",
+            text: "7 dias após o recebimento para solicitar troca ou devolução.",
+          },
+        ].map(({ Icon, title, text }) => (
+          <li key={title} className="flex gap-3 px-3 py-3">
+            <Icon className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-brand-deep">{title}</p>
+              <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
 
       <ShippingCalculator compact />
 
