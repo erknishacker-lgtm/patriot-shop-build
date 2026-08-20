@@ -7,6 +7,7 @@ import { ProductFaq } from "@/components/store/ProductFaq";
 import { ProductGallery } from "@/components/store/ProductGallery";
 import { ProductHighlights } from "@/components/store/ProductHighlights";
 import { ProductInfo } from "@/components/store/ProductInfo";
+import { ProductReviews } from "@/components/store/ProductReviews";
 import { ProductSpecifications } from "@/components/store/ProductSpecifications";
 import { ShippingCalculator } from "@/components/store/ShippingCalculator";
 import { StickyBuyBar } from "@/components/store/StickyBuyBar";
@@ -93,6 +94,7 @@ function ProductPage() {
       <BenefitsStrip />
       <ShippingCalculator />
       <ProductDescription paragraphs={product.description} />
+      <ProductReviews reviews={product.reviews} />
       <ProductHighlights items={product.highlights} />
       <ProductSpecifications specs={product.specifications} />
       <ProductFaq items={product.faq} />
