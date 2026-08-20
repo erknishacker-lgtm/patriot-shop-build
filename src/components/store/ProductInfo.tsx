@@ -154,11 +154,7 @@ export function ProductInfo(props: Props) {
       </p>
 
       <div className="overflow-hidden rounded-lg border border-border">
-        <p className="flex items-center justify-center gap-1.5 border-b border-border bg-surface px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-          <CreditCard className="size-3" aria-hidden="true" />
-          Formas de pagamento
-        </p>
-        <ul className="flex flex-wrap items-center justify-center gap-1.5 bg-card px-2 py-1.5">
+        <ul className="flex flex-wrap items-center justify-center gap-1 bg-card px-2 py-1.5">
           {[
             { Icon: CreditCard, label: "Cartão" },
             { Icon: Banknote, label: "Boleto" },
@@ -175,7 +171,7 @@ export function ProductInfo(props: Props) {
         </ul>
       </div>
 
-      <ul className="grid gap-1 overflow-hidden rounded-lg border border-border bg-card p-1.5 sm:grid-cols-3">
+      <ul className="grid gap-0.5 overflow-hidden rounded-lg border border-border bg-card p-1 sm:grid-cols-3">
         {[
           {
             Icon: ShieldCheck,
@@ -193,11 +189,11 @@ export function ProductInfo(props: Props) {
             text: "7 dias úteis",
           },
         ].map(({ Icon, title, text }) => (
-          <li key={title} className="flex items-center gap-1.5 rounded-md px-2 py-1.5">
-            <Icon className="size-3.5 shrink-0 text-brand" aria-hidden="true" />
+          <li key={title} className="flex items-center gap-1 rounded-md px-1.5 py-1">
+            <Icon className="size-3 shrink-0 text-brand" aria-hidden="true" />
             <div className="min-w-0">
-              <p className="text-[10px] font-semibold leading-tight text-brand-deep">{title}</p>
-              <p className="text-[10px] leading-tight text-muted-foreground">{text}</p>
+              <p className="text-[10px] font-semibold leading-none text-brand-deep">{title}</p>
+              <p className="text-[10px] leading-none text-muted-foreground">{text}</p>
             </div>
           </li>
         ))}
