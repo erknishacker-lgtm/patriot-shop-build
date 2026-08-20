@@ -29,7 +29,7 @@ export function PriceBlock({ price, oldPrice, pixDiscount, maxInstallments }: Pr
             </span>
           )}
         </div>
-        <p className="mt-1 font-display text-4xl font-extrabold tracking-tight text-brand-deep sm:text-[2.75rem]">
+        <p className="mt-1 font-display text-3xl font-extrabold tracking-tight text-brand-deep sm:text-4xl">
           {formatBRL(price)}
         </p>
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
