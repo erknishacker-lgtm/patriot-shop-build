@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   Check,
   Heart,
-  Loader2 as Spinner,
   RotateCcw,
   ShieldCheck,
   ShoppingCart,
@@ -11,11 +10,9 @@ import {
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
+import { useCart } from "@/hooks/use-cart";
 import { useProduct } from "@/hooks/use-product";
 import { cn } from "@/lib/utils";
-import { buildYampiCheckoutUrl } from "@/lib/yampi";
-import { createYampiCheckout } from "@/lib/yampi.functions";
-import { useServerFn } from "@tanstack/react-start";
 import { PriceBlock } from "./PriceBlock";
 import { ProductRating } from "./ProductRating";
 import { QuantitySelector } from "./QuantitySelector";
@@ -40,9 +37,8 @@ export function ProductInfo(props: Props) {
   } = props;
   const [showSizeError, setShowSizeError] = useState(false);
   const [favorite, setFavorite] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [added, setAdded] = useState(false);
-  const goToYampiCheckout = useServerFn(createYampiCheckout);
+  const { addItem, openCart } = useCart();
 
   useEffect(() => {
     if (!added) return;
@@ -50,28 +46,25 @@ export function ProductInfo(props: Props) {
     return () => clearTimeout(timer);
   }, [added]);
 
-  const handleBuyNow = async () => {
+  const handleAddToCart = () => {
     if (!selectedSize) {
       setShowSizeError(true);
       toast.error("Escolha um tamanho antes de continuar.");
       return;
     }
-    setLoading(true);
-    try {
-      const result = await goToYampiCheckout({
-        data: { quantity, size: selectedSize },
-      });
-      setAdded(true);
-      toast.success("Redirecionando para o checkout seguro...", {
-        description: `${product.name} • Tamanho ${selectedSize} • ${quantity}x`,
-      });
-      window.location.href = result.url;
-    } catch {
-      toast.error("Não foi possível abrir o checkout. Tente novamente.");
-      window.location.href = buildYampiCheckoutUrl({ quantity, size: selectedSize });
-    } finally {
-      setLoading(false);
-    }
+    addItem({
+      productId: product.sku,
+      name: product.name,
+      image: product.images[0]?.src ?? "",
+      size: selectedSize,
+      unitPrice,
+      quantity,
+    });
+    setAdded(true);
+    toast.success("Produto adicionado ao carrinho", {
+      description: `${product.name} • Tamanho ${selectedSize} • ${quantity}x`,
+    });
+    openCart();
   };
 
 
@@ -138,17 +131,11 @@ export function ProductInfo(props: Props) {
         variant="brand"
         size="xl"
         className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
-        onClick={() => void handleBuyNow()}
-        disabled={loading}
+        onClick={handleAddToCart}
       >
-        {loading ? (
-          <Spinner className="animate-spin" />
-        ) : added ? (
-          <Check className="animate-in zoom-in" />
-        ) : (
-          <ShoppingCart />
-        )}
-        {loading ? "PROCESSANDO..." : added ? "NO CARRINHO" : "COMPRAR AGORA"}
+        {added ? <Check className="animate-in zoom-in" /> : <ShoppingCart />}
+        {added ? "ADICIONADO" : "ADICIONAR AO CARRINHO"}
+
 
       </Button>
 
