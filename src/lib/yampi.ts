@@ -10,3 +10,5 @@ export function buildYampiCheckoutUrl(options: { quantity?: number; size?: strin
   }
   return url.toString();
 }
+
+export const YAMPI_ALIAS = "camisetas2026";

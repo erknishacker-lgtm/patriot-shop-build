@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { useProduct } from "@/hooks/use-product";
 import { cn } from "@/lib/utils";
 import { buildYampiCheckoutUrl } from "@/lib/yampi";
+import { createYampiCheckout } from "@/lib/yampi.functions";
+import { useServerFn } from "@tanstack/react-start";
 import { PriceBlock } from "./PriceBlock";
 import { ProductRating } from "./ProductRating";
 import { QuantitySelector } from "./QuantitySelector";
@@ -21,7 +23,6 @@ import { ShareMenu } from "./ShareMenu";
 import { ShippingCalculator } from "./ShippingCalculator";
 import { SizeChartDialog } from "./SizeChartDialog";
 import { SizeSelector } from "./SizeSelector";
-import { YampiCartSheet } from "./YampiCartSheet";
 
 
 type Props = ReturnType<typeof useProduct>;
@@ -41,8 +42,7 @@ export function ProductInfo(props: Props) {
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
   const [added, setAdded] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [cartUrl, setCartUrl] = useState("");
+  const goToYampiCheckout = useServerFn(createYampiCheckout);
 
   useEffect(() => {
     if (!added) return;
@@ -57,15 +57,23 @@ export function ProductInfo(props: Props) {
       return;
     }
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 350));
-    setAdded(true);
-    toast.success("Produto adicionado ao carrinho!", {
-      description: `${product.name} • Tamanho ${selectedSize} • ${quantity}x`,
-    });
-    setCartUrl(buildYampiCheckoutUrl({ quantity, size: selectedSize }));
-    setCartOpen(true);
-    setLoading(false);
+    try {
+      const result = await goToYampiCheckout({
+        data: { quantity, size: selectedSize },
+      });
+      setAdded(true);
+      toast.success("Redirecionando para o checkout seguro...", {
+        description: `${product.name} • Tamanho ${selectedSize} • ${quantity}x`,
+      });
+      window.location.href = result.url;
+    } catch {
+      toast.error("Não foi possível abrir o checkout. Tente novamente.");
+      window.location.href = buildYampiCheckoutUrl({ quantity, size: selectedSize });
+    } finally {
+      setLoading(false);
+    }
   };
+
 
 
   const oldUnitPrice = product.oldPrice ? product.oldPrice + sizeExtra : null;
@@ -144,7 +152,6 @@ export function ProductInfo(props: Props) {
 
       </Button>
 
-      <YampiCartSheet open={cartOpen} onOpenChange={setCartOpen} checkoutUrl={cartUrl} />
 
 
 
