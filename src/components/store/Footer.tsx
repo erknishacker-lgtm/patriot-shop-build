@@ -4,31 +4,34 @@ import { Facebook, Instagram, Youtube } from "lucide-react";
 const COLUMNS = [
   {
     title: "Institucional",
-    links: [
-      { label: "Início", to: "/" },
-      { label: "A Loja", to: "/" },
-      { label: "Sobre", to: "/" },
-    ],
+    links: ["Início", "A Loja", "Sobre"],
   },
   {
     title: "Atendimento",
     links: [
-      { label: "Fale conosco", to: "/" },
-      { label: "Política de Privacidade", to: "/" },
-      { label: "Termos de Uso", to: "/" },
+      "Contato",
+      "Política de Privacidade",
+      "Termos de Uso",
+      "Trocas e Devoluções",
+      "Política de Frete",
     ],
   },
 ];
 
-const PAYMENTS = ["Pix", "Visa", "Mastercard", "Amex", "Boleto"];
+const PAYMENTS = ["Pix", "Visa", "Mastercard", "American Express", "Boleto"];
 
 export function Footer() {
   return (
-    <footer className="mt-16 bg-brand-deep text-primary-foreground">
-      <div className="mx-auto max-w-7xl px-4 py-12">
+    <footer className="bg-brand-deep text-primary-foreground">
+      <div className="mx-auto max-w-[1200px] px-4 py-12">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="font-display text-lg font-bold text-gold">Clube Bolsonaro</p>
+            <div className="flex items-center gap-2">
+              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary-foreground/10">
+                <span className="font-display text-sm font-bold text-gold">CB</span>
+              </span>
+              <p className="font-display text-lg font-bold text-gold">Clube Bolsonaro</p>
+            </div>
             <p className="mt-3 max-w-xs text-sm text-primary-foreground/70">
               Loja oficial de vestuário com identidade, qualidade e propósito. Envio para todo o
               Brasil com Nota Fiscal.
@@ -41,13 +44,13 @@ export function Footer() {
                 {column.title}
               </h2>
               <ul className="mt-4 space-y-2.5">
-                {column.links.map((link) => (
-                  <li key={link.label}>
+                {column.links.map((label) => (
+                  <li key={label}>
                     <Link
-                      to={link.to}
+                      to="/"
                       className="text-sm text-primary-foreground/75 transition-colors hover:text-gold"
                     >
-                      {link.label}
+                      {label}
                     </Link>
                   </li>
                 ))}
@@ -57,13 +60,13 @@ export function Footer() {
 
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-gold">
-              Pagamento
+              Formas de pagamento
             </h2>
             <ul className="mt-4 flex flex-wrap gap-2">
               {PAYMENTS.map((payment) => (
                 <li
                   key={payment}
-                  className="rounded-md border border-primary-foreground/20 bg-primary-foreground/5 px-2.5 py-1.5 text-[11px] font-semibold"
+                  className="rounded-md border border-primary-foreground/20 px-2.5 py-1.5 text-[11px] font-semibold"
                 >
                   {payment}
                 </li>
