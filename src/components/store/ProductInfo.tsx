@@ -11,9 +11,9 @@ import {
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
-import { useCart } from "@/hooks/use-cart";
 import { useProduct } from "@/hooks/use-product";
 import { cn } from "@/lib/utils";
+import { buildYampiCheckoutUrl } from "@/lib/yampi";
 import { PriceBlock } from "./PriceBlock";
 import { ProductRating } from "./ProductRating";
 import { QuantitySelector } from "./QuantitySelector";
@@ -21,6 +21,7 @@ import { ShareMenu } from "./ShareMenu";
 import { ShippingCalculator } from "./ShippingCalculator";
 import { SizeChartDialog } from "./SizeChartDialog";
 import { SizeSelector } from "./SizeSelector";
+
 
 type Props = ReturnType<typeof useProduct>;
 
