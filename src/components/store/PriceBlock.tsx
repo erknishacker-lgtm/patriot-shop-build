@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Info, QrCode } from "lucide-react";
 import { formatBRL } from "@/lib/format";
 import { PaymentMethodsDialog } from "./PaymentMethodsDialog";
@@ -7,6 +8,7 @@ type Props = {
   oldPrice: number | null;
   pixDiscount: number;
   maxInstallments: number;
+  action?: ReactNode;
 };
 
 export function PriceBlock({ price, oldPrice, pixDiscount, maxInstallments }: Props) {
