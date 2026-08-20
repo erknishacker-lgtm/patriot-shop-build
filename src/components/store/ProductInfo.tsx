@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   Check,
   Heart,
-  Loader2 as Spinner,
   RotateCcw,
   ShieldCheck,
   ShoppingCart,
@@ -11,11 +10,9 @@ import {
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
+import { useCart } from "@/hooks/use-cart";
 import { useProduct } from "@/hooks/use-product";
 import { cn } from "@/lib/utils";
-import { buildYampiCheckoutUrl } from "@/lib/yampi";
-import { createYampiCheckout } from "@/lib/yampi.functions";
-import { useServerFn } from "@tanstack/react-start";
 import { PriceBlock } from "./PriceBlock";
 import { ProductRating } from "./ProductRating";
 import { QuantitySelector } from "./QuantitySelector";
