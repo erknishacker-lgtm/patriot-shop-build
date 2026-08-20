@@ -105,6 +105,25 @@ export function ProductInfo(props: Props) {
         oldPrice={oldUnitPrice}
         pixDiscount={product.pixDiscount}
         maxInstallments={product.maxInstallments}
+        action={
+          <Button
+            id="cta-add-cart"
+            variant="brand"
+            size="xl"
+            className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
+            onClick={() => void handleAddToCart()}
+            disabled={loading}
+          >
+            {loading ? (
+              <Loader2 className="animate-spin" />
+            ) : added ? (
+              <Check className="animate-in zoom-in" />
+            ) : (
+              <ShoppingCart />
+            )}
+            {loading ? "ADICIONANDO..." : added ? "ADICIONADO!" : "ADICIONAR AO CARRINHO"}
+          </Button>
+        }
       />
 
       <div className="rounded-xl border border-border bg-card p-4">
@@ -159,24 +178,6 @@ export function ProductInfo(props: Props) {
           <p className="truncate text-xl font-bold text-brand-deep">{formatBRL(total)}</p>
         </div>
       </div>
-
-      <Button
-        id="cta-add-cart"
-        variant="cta"
-        size="xl"
-        className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
-        onClick={() => void handleAddToCart()}
-        disabled={loading}
-      >
-        {loading ? (
-          <Loader2 className="animate-spin" />
-        ) : added ? (
-          <Check className="animate-in zoom-in" />
-        ) : (
-          <ShoppingCart />
-        )}
-        {loading ? "ADICIONANDO..." : added ? "ADICIONADO!" : "ADICIONAR AO CARRINHO"}
-      </Button>
 
       <div className="rounded-xl border border-border bg-surface p-4">
         <p className="flex items-center gap-2 text-sm font-semibold text-brand-deep">
