@@ -101,6 +101,26 @@ export function ProductInfo(props: Props) {
         </p>
       </div>
 
+      <div>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-foreground">
+            Escolha seu tamanho
+          </h2>
+          <SizeChartDialog rows={product.sizeChart} />
+        </div>
+        <div className="mt-2">
+          <SizeSelector
+            sizes={product.sizes}
+            selected={selectedSize}
+            error={showSizeError}
+            onSelect={(size) => {
+              setSelectedSize(size);
+              setShowSizeError(false);
+            }}
+          />
+        </div>
+      </div>
+
       <PriceBlock
         price={unitPrice}
         oldPrice={oldUnitPrice}
