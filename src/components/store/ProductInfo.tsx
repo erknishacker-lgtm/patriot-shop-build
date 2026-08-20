@@ -149,28 +149,6 @@ export function ProductInfo(props: Props) {
         {loading ? "ADICIONANDO..." : added ? "ADICIONADO!" : "ADICIONAR AO CARRINHO"}
       </Button>
 
-      <p className="text-center text-xs text-muted-foreground">
-        Total: <span className="font-bold text-brand-deep">{formatBRL(total)}</span>
-      </p>
-
-      <div className="overflow-hidden rounded-lg border border-border">
-        <ul className="flex flex-wrap items-center justify-center gap-1 bg-card px-2 py-1.5">
-          {[
-            { Icon: CreditCard, label: "Cartão" },
-            { Icon: Banknote, label: "Boleto" },
-            { Icon: ShieldCheck, label: "Pix" },
-          ].map(({ Icon, label }) => (
-            <li
-              key={label}
-              className="flex items-center gap-1 rounded border border-border px-2 py-0.5 text-[10px] font-semibold text-muted-foreground"
-            >
-              <Icon className="size-3" aria-hidden="true" />
-              {label}
-            </li>
-          ))}
-        </ul>
-      </div>
-
       <ul className="grid gap-0.5 overflow-hidden rounded-lg border border-border bg-card p-1 sm:grid-cols-3">
         {[
           {
