@@ -94,6 +94,7 @@ function ProductPage() {
       <BenefitsStrip />
       <ShippingCalculator />
       <ProductDescription paragraphs={product.description} />
+      <ProductReviews reviews={product.reviews} />
       <ProductHighlights items={product.highlights} />
       <ProductSpecifications specs={product.specifications} />
       <ProductFaq items={product.faq} />
