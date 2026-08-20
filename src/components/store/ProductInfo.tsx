@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { useProduct } from "@/hooks/use-product";
 import { cn } from "@/lib/utils";
 import { buildYampiCheckoutUrl } from "@/lib/yampi";
+import { createYampiCheckout } from "@/lib/yampi.functions";
+import { useServerFn } from "@tanstack/react-start";
 import { PriceBlock } from "./PriceBlock";
 import { ProductRating } from "./ProductRating";
 import { QuantitySelector } from "./QuantitySelector";
@@ -21,7 +23,6 @@ import { ShareMenu } from "./ShareMenu";
 import { ShippingCalculator } from "./ShippingCalculator";
 import { SizeChartDialog } from "./SizeChartDialog";
 import { SizeSelector } from "./SizeSelector";
-import { YampiCartSheet } from "./YampiCartSheet";
 
 
 type Props = ReturnType<typeof useProduct>;
@@ -151,7 +152,6 @@ export function ProductInfo(props: Props) {
 
       </Button>
 
-      <YampiCartSheet open={cartOpen} onOpenChange={setCartOpen} checkoutUrl={cartUrl} />
 
 
 
