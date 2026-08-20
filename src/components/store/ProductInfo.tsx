@@ -125,7 +125,7 @@ export function ProductInfo(props: Props) {
         variant="brand"
         size="xl"
         className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
-        onClick={() => void handleAddToCart()}
+        onClick={() => void handleBuyNow()}
         disabled={loading}
       >
         {loading ? (
@@ -135,7 +135,8 @@ export function ProductInfo(props: Props) {
         ) : (
           <ShoppingCart />
         )}
-        {loading ? "ADICIONANDO..." : added ? "ADICIONADO!" : "ADICIONAR AO CARRINHO"}
+        {loading ? "PROCESSANDO..." : added ? "REDIRECIONANDO..." : "COMPRAR AGORA"}
+
       </Button>
 
       <ul className="grid gap-0.5 overflow-hidden rounded-lg border border-border bg-card p-1 sm:grid-cols-3">
