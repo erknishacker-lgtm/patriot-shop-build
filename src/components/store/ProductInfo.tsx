@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+
 import { useCart } from "@/hooks/use-cart";
 import { useProduct } from "@/hooks/use-product";
 import { formatBRL } from "@/lib/format";
