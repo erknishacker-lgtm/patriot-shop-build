@@ -14,15 +14,19 @@ export type ShippingOption = {
  */
 async function mockQuote(cep: string): Promise<ShippingOption[]> {
   await new Promise((resolve) => setTimeout(resolve, 900));
-  const factor = Number(cep.slice(-1)) / 10;
+  const far = Number(cep.slice(0, 1)) >= 6 ? 2 : 0;
   return [
-    { id: "pac", name: "PAC", eta: "7 a 10 dias úteis", price: 19.9 + factor },
-    { id: "sedex", name: "SEDEX", eta: "3 a 5 dias úteis", price: 29.9 + factor },
     {
-      id: "express",
+      id: "padrao",
+      name: "Entrega padrão",
+      eta: `${8 + far} a ${13 + far} dias úteis`,
+      price: 0,
+    },
+    {
+      id: "expressa",
       name: "Entrega expressa",
-      eta: "1 a 2 dias úteis",
-      price: 39.9 + factor,
+      eta: `${5 + far} a ${9 + far} dias úteis`,
+      price: 19.9,
     },
   ];
 }
