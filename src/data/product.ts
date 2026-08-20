@@ -1,8 +1,7 @@
-import img1 from "@/assets/camiseta-1.jpg";
-import img2 from "@/assets/camiseta-2.jpg";
-import img3 from "@/assets/camiseta-3.jpg";
-import img4 from "@/assets/camiseta-4.jpg";
-import img5 from "@/assets/camiseta-5.jpg";
+import img1 from "@/assets/mitinho-4.png.asset.json";
+import img2 from "@/assets/mitinho-5.png.asset.json";
+import img3 from "@/assets/mitinho-6.png.asset.json";
+import img4 from "@/assets/mitinho-7.png.asset.json";
 
 export type ProductSize = {
   /** Rótulo exibido no seletor */
@@ -75,11 +74,10 @@ export const product: Product = {
   pixDiscount: 0.03,
   maxInstallments: 12,
   images: [
-    { src: img1, alt: "Camiseta Clube Bolsonaro verde vista de frente" },
-    { src: img2, alt: "Camiseta Clube Bolsonaro vista das costas no cabide" },
-    { src: img3, alt: "Detalhe do escudo em alto relevo emborrachado 3D" },
-    { src: img4, alt: "Detalhe da gola polo V com retilínea" },
-    { src: img5, alt: "Camiseta Clube Bolsonaro em flat lay" },
+    { src: img1.url, alt: "Camiseta amarela Clube Bolsonaro #Mitinho vista de frente" },
+    { src: img2.url, alt: "Modelo vestindo a camiseta amarela #Mitinho" },
+    { src: img3.url, alt: "Modelo de costas com a camiseta amarela lisa" },
+    { src: img4.url, alt: "Camiseta amarela #Mitinho em flat lay pelas costas" },
   ],
   sizes: [
     { label: "P", extra: 0, available: true },
