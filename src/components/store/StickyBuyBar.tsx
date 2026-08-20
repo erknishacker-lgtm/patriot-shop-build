@@ -19,7 +19,7 @@ export function StickyBuyBar({ price, visible, onBuy }: Props) {
         </div>
         <Button variant="cta" size="lg" className="shrink-0" onClick={onBuy}>
           <ShoppingCart />
-          Adicionar
+          Comprar
         </Button>
       </div>
     </div>

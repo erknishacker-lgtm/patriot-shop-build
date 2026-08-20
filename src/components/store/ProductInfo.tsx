@@ -11,9 +11,9 @@ import {
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
-import { useCart } from "@/hooks/use-cart";
 import { useProduct } from "@/hooks/use-product";
 import { cn } from "@/lib/utils";
+import { buildYampiCheckoutUrl } from "@/lib/yampi";
 import { PriceBlock } from "./PriceBlock";
 import { ProductRating } from "./ProductRating";
 import { QuantitySelector } from "./QuantitySelector";
@@ -21,6 +21,7 @@ import { ShareMenu } from "./ShareMenu";
 import { ShippingCalculator } from "./ShippingCalculator";
 import { SizeChartDialog } from "./SizeChartDialog";
 import { SizeSelector } from "./SizeSelector";
+
 
 type Props = ReturnType<typeof useProduct>;
 
@@ -35,7 +36,6 @@ export function ProductInfo(props: Props) {
     total,
     sizeExtra,
   } = props;
-  const { addItem, openCart } = useCart();
   const [showSizeError, setShowSizeError] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,29 +47,21 @@ export function ProductInfo(props: Props) {
     return () => clearTimeout(timer);
   }, [added]);
 
-  const handleAddToCart = async () => {
+  const handleBuyNow = async () => {
     if (!selectedSize) {
       setShowSizeError(true);
-      toast.error("Escolha um tamanho antes de adicionar ao carrinho.");
+      toast.error("Escolha um tamanho antes de continuar.");
       return;
     }
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 550));
-    addItem({
-      productId: product.id,
-      name: product.name,
-      image: product.images[0]!.src,
-      size: selectedSize,
-      unitPrice,
-      quantity,
-    });
-    setLoading(false);
+    await new Promise((resolve) => setTimeout(resolve, 350));
     setAdded(true);
-    toast.success("Produto adicionado ao carrinho!", {
+    toast.success("Redirecionando para o checkout seguro...", {
       description: `${product.name} • Tamanho ${selectedSize} • ${quantity}x`,
     });
-    openCart();
+    window.location.href = buildYampiCheckoutUrl({ quantity, size: selectedSize });
   };
+
 
   const oldUnitPrice = product.oldPrice ? product.oldPrice + sizeExtra : null;
 
@@ -133,7 +125,7 @@ export function ProductInfo(props: Props) {
         variant="brand"
         size="xl"
         className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
-        onClick={() => void handleAddToCart()}
+        onClick={() => void handleBuyNow()}
         disabled={loading}
       >
         {loading ? (
@@ -143,7 +135,8 @@ export function ProductInfo(props: Props) {
         ) : (
           <ShoppingCart />
         )}
-        {loading ? "ADICIONANDO..." : added ? "ADICIONADO!" : "ADICIONAR AO CARRINHO"}
+        {loading ? "PROCESSANDO..." : added ? "REDIRECIONANDO..." : "COMPRAR AGORA"}
+
       </Button>
 
       <ul className="grid gap-0.5 overflow-hidden rounded-lg border border-border bg-card p-1 sm:grid-cols-3">
