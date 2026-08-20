@@ -21,7 +21,7 @@ import { ShareMenu } from "./ShareMenu";
 import { ShippingCalculator } from "./ShippingCalculator";
 import { SizeChartDialog } from "./SizeChartDialog";
 import { SizeSelector } from "./SizeSelector";
-import { YampiBuyButton } from "./YampiBuyButton";
+import { YampiCartSheet } from "./YampiCartSheet";
 
 
 type Props = ReturnType<typeof useProduct>;
@@ -41,6 +41,8 @@ export function ProductInfo(props: Props) {
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
   const [added, setAdded] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartUrl, setCartUrl] = useState("");
 
   useEffect(() => {
     if (!added) return;
@@ -57,10 +59,12 @@ export function ProductInfo(props: Props) {
     setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 350));
     setAdded(true);
-    toast.success("Redirecionando para o checkout seguro...", {
+    toast.success("Produto adicionado ao carrinho!", {
       description: `${product.name} • Tamanho ${selectedSize} • ${quantity}x`,
     });
-    window.location.href = buildYampiCheckoutUrl({ quantity, size: selectedSize });
+    setCartUrl(buildYampiCheckoutUrl({ quantity, size: selectedSize }));
+    setCartOpen(true);
+    setLoading(false);
   };
 
 
@@ -136,11 +140,13 @@ export function ProductInfo(props: Props) {
         ) : (
           <ShoppingCart />
         )}
-        {loading ? "PROCESSANDO..." : added ? "REDIRECIONANDO..." : "COMPRAR AGORA"}
+        {loading ? "PROCESSANDO..." : added ? "NO CARRINHO" : "COMPRAR AGORA"}
 
       </Button>
 
-      <YampiBuyButton className="w-full" />
+      <YampiCartSheet open={cartOpen} onOpenChange={setCartOpen} checkoutUrl={cartUrl} />
+
+
 
 
       <ul className="grid gap-0.5 overflow-hidden rounded-lg border border-border bg-card p-1 sm:grid-cols-3">
