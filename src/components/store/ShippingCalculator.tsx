@@ -13,13 +13,68 @@ export function ShippingCalculator({ compact }: Props) {
   const [cep, setCep] = useState("");
   const { loading, error, options, calculate } = useShipping();
 
-  const Wrapper = compact ? "div" : "section";
-  const wrapperClass = compact
-    ? ""
-    : "mx-auto max-w-[1200px] px-4 py-12";
+
+
+
+  if (compact) {
+    return (
+      <div aria-labelledby="frete-titulo" className="rounded-2xl border border-border bg-card p-4">
+        <h2
+          id="frete-titulo"
+          className="text-center font-display text-base font-bold text-brand-deep"
+        >
+          Calcule o prazo de entrega
+        </h2>
+        <form
+          className="mt-3 flex items-center gap-2"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void calculate(cep);
+          }}
+        >
+          <label htmlFor="cep" className="sr-only">
+            CEP
+          </label>
+          <Input
+            id="cep"
+            inputMode="numeric"
+            placeholder="Digite seu CEP"
+            value={cep}
+            onChange={(e) => setCep(maskCep(e.target.value))}
+            className="h-11 flex-1 rounded-md"
+          />
+          <Button
+            type="submit"
+            variant="brand"
+            disabled={loading}
+            className="h-11 w-32 shrink-0 rounded-md text-sm font-bold"
+          >
+            {loading ? <Loader2 className="animate-spin" /> : null}
+            {loading ? "Calculando" : "Calcular"}
+          </Button>
+        </form>
+        {error && <p className="mt-2 text-xs font-medium text-destructive">{error}</p>}
+        {options && !loading ? (
+          <ul className="mt-3 divide-y divide-border rounded-xl border border-border animate-in fade-in slide-in-from-bottom-1">
+            {options.map((option) => (
+              <li key={option.id} className="flex items-center justify-between gap-3 px-3 py-3">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-brand-deep">{option.name}</p>
+                  <p className="text-xs text-muted-foreground">{option.eta}</p>
+                </div>
+                <span className="shrink-0 text-sm font-bold text-brand">
+                  {option.price === 0 ? "Grátis" : formatBRL(option.price)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
+    );
+  }
 
   return (
-    <Wrapper aria-labelledby="frete-titulo" className={wrapperClass}>
+    <section aria-labelledby="frete-titulo" className="mx-auto max-w-[1200px] px-4 py-12">
       <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start">
           <div>
@@ -41,11 +96,11 @@ export function ShippingCalculator({ compact }: Props) {
                 void calculate(cep);
               }}
             >
-              <label htmlFor="cep" className="sr-only">
+              <label htmlFor="cep-full" className="sr-only">
                 CEP
               </label>
               <Input
-                id="cep"
+                id="cep-full"
                 inputMode="numeric"
                 placeholder="Digite seu CEP"
                 value={cep}
@@ -97,6 +152,7 @@ export function ShippingCalculator({ compact }: Props) {
           </div>
         </div>
       </div>
-    </Wrapper>
+    </section>
   );
 }
+
