@@ -22,6 +22,7 @@
   --color-brand: var(--brand);
   --color-brand-deep: var(--brand-deep);
   --color-brand-soft: var(--brand-soft);
+  --color-brand-foreground: var(--brand-foreground);
   --color-gold: var(--gold);
   --color-gold-strong: var(--gold-strong);
   --color-gold-foreground: var(--gold-foreground);
@@ -110,6 +111,7 @@
   --brand-deep: oklch(0.24 0.055 155);
   --brand: oklch(0.36 0.075 155);
   --brand-soft: oklch(0.95 0.03 150);
+  --brand-foreground: oklch(0.985 0.01 120);
   --gold: oklch(0.83 0.16 88);
   --gold-strong: oklch(0.76 0.16 78);
   --gold-foreground: oklch(0.24 0.055 155);
