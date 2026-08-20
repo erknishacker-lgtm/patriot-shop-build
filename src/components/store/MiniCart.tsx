@@ -17,16 +17,15 @@ export function MiniCart() {
   const goToYampiCheckout = useServerFn(createYampiCheckout);
 
   const handleCheckout = async () => {
-    const first = items[0];
-    if (!first) return;
-    const quantity = items.reduce((acc, i) => acc + i.quantity, 0);
+    if (items.length === 0) return;
+    const payload = items.map((i) => ({ size: i.size, quantity: i.quantity }));
     setLoading(true);
     try {
-      const result = await goToYampiCheckout({ data: { quantity, size: first.size } });
+      const result = await goToYampiCheckout({ data: { items: payload } });
       window.location.href = result.url;
     } catch {
       toast.error("Não foi possível abrir o checkout. Redirecionando...");
-      window.location.href = buildYampiCheckoutUrl({ quantity, size: first.size });
+      window.location.href = buildYampiCheckoutUrl(payload);
     } finally {
       setLoading(false);
     }
