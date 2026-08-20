@@ -9,7 +9,6 @@ import { ProductHighlights } from "@/components/store/ProductHighlights";
 import { ProductInfo } from "@/components/store/ProductInfo";
 import { ProductReviews } from "@/components/store/ProductReviews";
 import { ProductSpecifications } from "@/components/store/ProductSpecifications";
-import { ShippingCalculator } from "@/components/store/ShippingCalculator";
 import { StickyBuyBar } from "@/components/store/StickyBuyBar";
 import { StoreLayout } from "@/components/store/StoreLayout";
 import { TrustBlock } from "@/components/store/TrustBlock";
@@ -92,7 +91,6 @@ function ProductPage() {
       </div>
 
       <BenefitsStrip />
-      <ShippingCalculator />
       <ProductDescription paragraphs={product.description} />
       <ProductReviews reviews={product.reviews} />
       <ProductHighlights items={product.highlights} />

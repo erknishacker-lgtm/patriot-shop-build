@@ -23,6 +23,7 @@ import { PriceBlock } from "./PriceBlock";
 import { ProductRating } from "./ProductRating";
 import { QuantitySelector } from "./QuantitySelector";
 import { ShareMenu } from "./ShareMenu";
+import { ShippingCalculator } from "./ShippingCalculator";
 import { SizeChartDialog } from "./SizeChartDialog";
 import { SizeSelector } from "./SizeSelector";
 
@@ -203,6 +204,8 @@ export function ProductInfo(props: Props) {
           ))}
         </ul>
       </div>
+
+      <ShippingCalculator compact />
 
       <div className="flex gap-3">
         <Button

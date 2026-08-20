@@ -5,12 +5,21 @@ import { Input } from "@/components/ui/input";
 import { useShipping } from "@/hooks/use-shipping";
 import { formatBRL, maskCep } from "@/lib/format";
 
-export function ShippingCalculator() {
+type Props = {
+  compact?: boolean;
+};
+
+export function ShippingCalculator({ compact }: Props) {
   const [cep, setCep] = useState("");
   const { loading, error, options, calculate } = useShipping();
 
+  const Wrapper = compact ? "div" : "section";
+  const wrapperClass = compact
+    ? ""
+    : "mx-auto max-w-[1200px] px-4 py-12";
+
   return (
-    <section aria-labelledby="frete-titulo" className="mx-auto max-w-[1200px] px-4 py-12">
+    <Wrapper aria-labelledby="frete-titulo" className={wrapperClass}>
       <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start">
           <div>
@@ -88,6 +97,6 @@ export function ShippingCalculator() {
           </div>
         </div>
       </div>
-    </section>
+    </Wrapper>
   );
 }
