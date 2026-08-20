@@ -98,11 +98,14 @@ export function ProductReviews({ reviews }: Props) {
                       )}
                     </div>
                     <p className="mt-0.5 text-xs text-muted-foreground">
-                      {new Date(review.date).toLocaleDateString("pt-BR", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })}
+                      {(() => {
+                        const [y, m, d] = review.date.split("-");
+                        const monthNames = [
+                          "jan", "fev", "mar", "abr", "mai", "jun",
+                          "jul", "ago", "set", "out", "nov", "dez",
+                        ];
+                        return `${d} de ${monthNames[Number(m) - 1]}. de ${y}`;
+                      })()}
                     </p>
                   </div>
                   <div className="flex gap-0.5">

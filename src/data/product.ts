@@ -157,12 +157,12 @@ export const product: Product = {
     },
   ],
   sizeChart: [
-    { size: "P", chest: "50 cm", length: "70 cm", shoulder: "42 cm" },
-    { size: "M", chest: "52 cm", length: "72 cm", shoulder: "44 cm" },
-    { size: "G", chest: "54 cm", length: "74 cm", shoulder: "46 cm" },
-    { size: "GG", chest: "56 cm", length: "76 cm", shoulder: "48 cm" },
-    { size: "G1", chest: "60 cm", length: "78 cm", shoulder: "50 cm" },
-    { size: "G2", chest: "64 cm", length: "80 cm", shoulder: "52 cm" },
+    { size: "P", chest: "46 cm", length: "66 cm", shoulder: "38 cm" },
+    { size: "M", chest: "49 cm", length: "69 cm", shoulder: "40 cm" },
+    { size: "G", chest: "52 cm", length: "72 cm", shoulder: "42 cm" },
+    { size: "GG", chest: "55 cm", length: "75 cm", shoulder: "44 cm" },
+    { size: "G1", chest: "58 cm", length: "77 cm", shoulder: "46 cm" },
+    { size: "G2", chest: "61 cm", length: "79 cm", shoulder: "48 cm" },
   ],
   reviews: [
     {
