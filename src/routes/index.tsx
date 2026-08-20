@@ -101,6 +101,8 @@ function ProductPage() {
       <StickyBuyBar
         price={state.total}
         visible={showSticky}
+        size={state.selectedSize}
+        quantity={state.quantity}
         onBuy={() => document.getElementById("cta-add-cart")?.click()}
       />
       <div className="h-20 lg:hidden" aria-hidden="true" />
