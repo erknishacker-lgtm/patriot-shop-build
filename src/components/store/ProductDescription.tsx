@@ -1,6 +1,6 @@
 export function ProductDescription({ paragraphs }: { paragraphs: string[] }) {
   return (
-    <section className="card-elevated p-6 sm:p-8" aria-labelledby="descricao-titulo">
+    <section className="rounded-xl border border-border bg-card shadow-[var(--shadow-card)] p-6 sm:p-8" aria-labelledby="descricao-titulo">
       <h2 id="descricao-titulo" className="text-xl font-bold text-brand-deep sm:text-2xl">
         Descrição do Produto
       </h2>

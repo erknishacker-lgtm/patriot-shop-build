@@ -10,7 +10,7 @@ export function ShippingCalculator() {
   const { loading, error, options, calculate } = useShipping();
 
   return (
-    <section className="card-elevated p-4 sm:p-5" aria-labelledby="frete-titulo">
+    <section className="rounded-xl border border-border bg-card shadow-[var(--shadow-card)] p-4 sm:p-5" aria-labelledby="frete-titulo">
       <h2
         id="frete-titulo"
         className="flex items-center gap-2 text-sm font-semibold text-foreground"

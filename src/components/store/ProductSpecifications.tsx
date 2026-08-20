@@ -2,7 +2,7 @@ import type { ProductSpec } from "@/data/product";
 
 export function ProductSpecifications({ specs }: { specs: ProductSpec[] }) {
   return (
-    <section className="card-elevated p-6 sm:p-8" aria-labelledby="specs-titulo">
+    <section className="rounded-xl border border-border bg-card shadow-[var(--shadow-card)] p-6 sm:p-8" aria-labelledby="specs-titulo">
       <h2 id="specs-titulo" className="text-xl font-bold text-brand-deep sm:text-2xl">
         Especificações
       </h2>

@@ -81,7 +81,7 @@ function CheckoutPage() {
 
         <form onSubmit={handleSubmit} className="mt-8 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
           <div className="flex flex-col gap-6">
-            <section className="card-elevated p-5 sm:p-6">
+            <section className="rounded-xl border border-border bg-card shadow-[var(--shadow-card)] p-5 sm:p-6">
               <h2 className="text-lg font-bold text-brand-deep">Dados pessoais</h2>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <Field id="nome" label="Nome completo" required autoComplete="name" />
@@ -98,7 +98,7 @@ function CheckoutPage() {
               </div>
             </section>
 
-            <section className="card-elevated p-5 sm:p-6">
+            <section className="rounded-xl border border-border bg-card shadow-[var(--shadow-card)] p-5 sm:p-6">
               <h2 className="text-lg font-bold text-brand-deep">Endereço de entrega</h2>
               <div className="mt-4 grid gap-4 sm:grid-cols-6">
                 <Field
@@ -120,7 +120,7 @@ function CheckoutPage() {
               </div>
             </section>
 
-            <section className="card-elevated p-5 sm:p-6">
+            <section className="rounded-xl border border-border bg-card shadow-[var(--shadow-card)] p-5 sm:p-6">
               <h2 className="text-lg font-bold text-brand-deep">Forma de pagamento</h2>
               <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 {PAYMENT_METHODS.map(({ id, label, hint, Icon }) => (
@@ -152,7 +152,7 @@ function CheckoutPage() {
           </div>
 
           <aside className="lg:sticky lg:top-28 lg:self-start">
-            <section className="card-elevated p-5 sm:p-6">
+            <section className="rounded-xl border border-border bg-card shadow-[var(--shadow-card)] p-5 sm:p-6">
               <h2 className="text-lg font-bold text-brand-deep">Resumo do pedido</h2>
 
               {items.length === 0 ? (
