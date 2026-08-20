@@ -63,7 +63,7 @@ export type Product = {
 export const product: Product = {
   id: "camiseta-clube-bolsonaro",
   slug: "camiseta-clube-bolsonaro",
-  name: "Camiseta Clube Bolsonaro",
+  name: "Camiseta Clube Bolsonaro - #Mitinho",
   category: "Vestuário",
   categorySlug: "vestuario",
   badge: "DESTAQUE",
