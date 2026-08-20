@@ -18,7 +18,7 @@ export function TopBar() {
     return () => clearInterval(interval);
   }, []);
 
-  const current = messages[index % messages.length];
+  const current = messages[index % messages.length] ?? messages[0];
   const Icon = current.icon;
 
   return (
