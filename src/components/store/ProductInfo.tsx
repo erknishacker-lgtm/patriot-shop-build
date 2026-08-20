@@ -20,6 +20,7 @@ import { useProduct } from "@/hooks/use-product";
 import { formatBRL } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { PriceBlock } from "./PriceBlock";
+import { ProductRating } from "./ProductRating";
 import { QuantitySelector } from "./QuantitySelector";
 import { ShareMenu } from "./ShareMenu";
 import { SizeChartDialog } from "./SizeChartDialog";
