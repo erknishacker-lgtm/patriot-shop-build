@@ -11,7 +11,7 @@ export function ProductGallery({ images, title }: { images: GalleryImage[]; titl
   const [zoom, setZoom] = useState(false);
 
   const go = (delta: number) => setActive((i) => (i + delta + images.length) % images.length);
-  const current = images[active];
+  const current = images[active] ?? images[0]!;
 
   return (
     <div className="flex flex-col gap-3">
@@ -91,10 +91,7 @@ export function ProductGallery({ images, title }: { images: GalleryImage[]; titl
       </ul>
 
       <Dialog open={lightbox} onOpenChange={setLightbox}>
-        <DialogContent
-          showCloseButton={false}
-          className="max-w-3xl border-none bg-background p-2 sm:p-4"
-        >
+        <DialogContent className="max-w-3xl border-none bg-background p-2 sm:p-4">
           <DialogTitle className="sr-only">{title} — galeria ampliada</DialogTitle>
           <div className="relative">
             <img
