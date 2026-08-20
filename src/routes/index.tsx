@@ -1,15 +1,23 @@
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Breadcrumbs } from "@/components/store/Breadcrumbs";
+import { BenefitsStrip } from "@/components/store/BenefitsStrip";
 import { ProductDescription } from "@/components/store/ProductDescription";
+import { ProductFaq } from "@/components/store/ProductFaq";
 import { ProductGallery } from "@/components/store/ProductGallery";
+import { ProductHighlights } from "@/components/store/ProductHighlights";
 import { ProductInfo } from "@/components/store/ProductInfo";
 import { ProductSpecifications } from "@/components/store/ProductSpecifications";
+import { ShippingCalculator } from "@/components/store/ShippingCalculator";
+import { StickyBuyBar } from "@/components/store/StickyBuyBar";
 import { StoreLayout } from "@/components/store/StoreLayout";
+import { TrustBlock } from "@/components/store/TrustBlock";
 import { product } from "@/data/product";
+import { useProduct } from "@/hooks/use-product";
 
 const TITLE = "Camiseta Clube Bolsonaro | Loja Oficial";
 const DESCRIPTION =
-  "Camiseta Clube Bolsonaro com tecido Dry 3D, acabamento premium e identidade patriótica. Confira tamanhos e compre online.";
+  "Camiseta Clube Bolsonaro com tecido Dry 3D, 20% OFF, 3% de desconto no PIX e envio para todo o Brasil. Escolha seu tamanho e compre online.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,6 +34,21 @@ export const Route = createFileRoute("/")({
 });
 
 function ProductPage() {
+  const state = useProduct();
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const [showSticky, setShowSticky] = useState(false);
+
+  useEffect(() => {
+    const node = ctaRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowSticky(!!entry && !entry.isIntersecting),
+      { rootMargin: "-80px 0px 0px 0px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   const jsonLd = {
     "@context": "https://schema.org/",
     "@type": "Product",
@@ -49,7 +72,8 @@ function ProductPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="mx-auto max-w-7xl px-4">
+
+      <div className="mx-auto max-w-[1200px] px-4">
         <Breadcrumbs
           items={[
             { label: "Home", to: "/" },
@@ -58,16 +82,28 @@ function ProductPage() {
           ]}
         />
 
-        <div className="grid gap-8 pb-12 lg:grid-cols-2 lg:gap-12">
-          <ProductGallery images={product.images} title={product.name} />
-          <ProductInfo />
-        </div>
-
-        <div className="grid gap-6 pb-12 lg:grid-cols-2">
-          <ProductDescription paragraphs={product.description} />
-          <ProductSpecifications specs={product.specifications} />
+        <div ref={ctaRef} className="grid gap-8 pb-12 lg:grid-cols-2 lg:gap-14">
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <ProductGallery images={product.images} title={product.name} />
+          </div>
+          <ProductInfo {...state} />
         </div>
       </div>
+
+      <BenefitsStrip />
+      <ShippingCalculator />
+      <ProductDescription paragraphs={product.description} />
+      <ProductHighlights items={product.highlights} />
+      <ProductSpecifications specs={product.specifications} />
+      <ProductFaq items={product.faq} />
+      <TrustBlock />
+
+      <StickyBuyBar
+        price={state.total}
+        visible={showSticky}
+        onBuy={() => document.getElementById("cta-add-cart")?.click()}
+      />
+      <div className="h-20 lg:hidden" aria-hidden="true" />
     </StoreLayout>
   );
 }
