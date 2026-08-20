@@ -92,7 +92,6 @@ function ProductPage() {
       </div>
 
       <BenefitsStrip />
-      <ShippingCalculator />
       <ProductDescription paragraphs={product.description} />
       <ProductReviews reviews={product.reviews} />
       <ProductHighlights items={product.highlights} />
