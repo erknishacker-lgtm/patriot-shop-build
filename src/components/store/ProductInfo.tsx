@@ -131,17 +131,11 @@ export function ProductInfo(props: Props) {
         variant="brand"
         size="xl"
         className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
-        onClick={() => void handleBuyNow()}
-        disabled={loading}
+        onClick={handleAddToCart}
       >
-        {loading ? (
-          <Spinner className="animate-spin" />
-        ) : added ? (
-          <Check className="animate-in zoom-in" />
-        ) : (
-          <ShoppingCart />
-        )}
-        {loading ? "PROCESSANDO..." : added ? "NO CARRINHO" : "COMPRAR AGORA"}
+        {added ? <Check className="animate-in zoom-in" /> : <ShoppingCart />}
+        {added ? "ADICIONADO" : "ADICIONAR AO CARRINHO"}
+
 
       </Button>
 
