@@ -18,6 +18,16 @@ export type ProductSpec = {
   value: string;
 };
 
+export type ProductReview = {
+  id: string;
+  author: string;
+  rating: number;
+  date: string;
+  title: string;
+  content: string;
+  verified: boolean;
+};
+
 export type Product = {
   id: string;
   slug: string;
@@ -43,6 +53,7 @@ export type Product = {
   highlights: { title: string; text: string }[];
   faq: { question: string; answer: string }[];
   sizeChart: { size: string; chest: string; length: string; shoulder: string }[];
+  reviews: ProductReview[];
 };
 
 /**
