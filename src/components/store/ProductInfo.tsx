@@ -4,7 +4,6 @@ import {
   Check,
   CreditCard,
   Heart,
-  Loader2,
   Loader2 as Spinner,
   RotateCcw,
   ShieldCheck,
