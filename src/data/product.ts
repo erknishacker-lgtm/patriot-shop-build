@@ -70,8 +70,8 @@ export const product: Product = {
   sku: "CB-CAM-0001",
   brand: "Clube Bolsonaro",
   stock: 42,
-  price: 239.8,
-  oldPrice: 299.8,
+  price: 89.9,
+  oldPrice: 119.9,
   pixDiscount: 0.03,
   maxInstallments: 12,
   images: [
