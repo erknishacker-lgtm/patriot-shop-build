@@ -105,10 +105,14 @@ export function MiniCart() {
               </p>
               <Separator className="my-4" />
               <div className="flex flex-col gap-2">
-                <Button variant="cta" size="lg" asChild>
-                  <Link to="/checkout" onClick={closeCart}>
-                    Finalizar compra
-                  </Link>
+                <Button
+                  variant="brand"
+                  size="lg"
+                  disabled={loading}
+                  onClick={() => void handleCheckout()}
+                >
+                  {loading && <Loader2 className="animate-spin" />}
+                  {loading ? "Abrindo checkout..." : "Finalizar compra"}
                 </Button>
                 <Button variant="ghost" onClick={closeCart}>
                   Continuar comprando
