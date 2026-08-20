@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Breadcrumbs } from "@/components/store/Breadcrumbs";
 import { BenefitsStrip } from "@/components/store/BenefitsStrip";
-import { CollectionSection } from "@/components/store/CollectionSection";
 import { ProductDescription } from "@/components/store/ProductDescription";
 import { ProductFaq } from "@/components/store/ProductFaq";
 import { ProductGallery } from "@/components/store/ProductGallery";
@@ -93,7 +92,6 @@ function ProductPage() {
 
       <BenefitsStrip />
       <ProductDescription paragraphs={product.description} />
-      <CollectionSection />
       <ProductReviews reviews={product.reviews} />
       <ProductHighlights items={product.highlights} />
       <ProductSpecifications specs={product.specifications} />
