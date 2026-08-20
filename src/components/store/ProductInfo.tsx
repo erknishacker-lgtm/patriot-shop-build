@@ -88,6 +88,13 @@ export function ProductInfo(props: Props) {
         <h1 className="mt-3 font-display text-2xl font-extrabold leading-tight text-brand-deep sm:text-3xl lg:text-[2.25rem]">
           {product.name}
         </h1>
+        <ProductRating
+          rating={
+            product.reviews.reduce((sum, r) => sum + r.rating, 0) / product.reviews.length
+          }
+          reviewCount={product.reviews.length}
+          className="mt-3"
+        />
         <p className="mt-2 text-sm text-muted-foreground">
           {product.category} • SKU {product.sku}
         </p>
