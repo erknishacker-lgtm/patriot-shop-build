@@ -169,26 +169,6 @@ export function ProductInfo(props: Props) {
         </ul>
       </div>
 
-      <Separator />
-
-      <div>
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="text-sm font-semibold text-foreground">Escolha seu tamanho</h2>
-          <SizeChartDialog rows={product.sizeChart} />
-        </div>
-        <div className="mt-3">
-          <SizeSelector
-            sizes={product.sizes}
-            selected={selectedSize}
-            error={showSizeError}
-            onSelect={(size) => {
-              setSelectedSize(size);
-              setShowSizeError(false);
-            }}
-          />
-        </div>
-      </div>
-
       <div className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-4">
         <div>
           <p className="mb-2 text-sm font-semibold text-foreground">Quantidade</p>
