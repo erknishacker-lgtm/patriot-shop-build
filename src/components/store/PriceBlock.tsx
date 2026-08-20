@@ -68,6 +68,8 @@ export function PriceBlock({ price, oldPrice, pixDiscount, maxInstallments, acti
           </div>
         </div>
       </div>
+
+      {action && <div className="mt-4">{action}</div>}
     </div>
   );
 }
