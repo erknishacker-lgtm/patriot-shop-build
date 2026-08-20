@@ -36,7 +36,6 @@ export function ProductInfo(props: Props) {
     total,
     sizeExtra,
   } = props;
-  const { addItem, openCart } = useCart();
   const [showSizeError, setShowSizeError] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -48,29 +47,21 @@ export function ProductInfo(props: Props) {
     return () => clearTimeout(timer);
   }, [added]);
 
-  const handleAddToCart = async () => {
+  const handleBuyNow = async () => {
     if (!selectedSize) {
       setShowSizeError(true);
-      toast.error("Escolha um tamanho antes de adicionar ao carrinho.");
+      toast.error("Escolha um tamanho antes de continuar.");
       return;
     }
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 550));
-    addItem({
-      productId: product.id,
-      name: product.name,
-      image: product.images[0]!.src,
-      size: selectedSize,
-      unitPrice,
-      quantity,
-    });
-    setLoading(false);
+    await new Promise((resolve) => setTimeout(resolve, 350));
     setAdded(true);
-    toast.success("Produto adicionado ao carrinho!", {
+    toast.success("Redirecionando para o checkout seguro...", {
       description: `${product.name} • Tamanho ${selectedSize} • ${quantity}x`,
     });
-    openCart();
+    window.location.href = buildYampiCheckoutUrl({ quantity, size: selectedSize });
   };
+
 
   const oldUnitPrice = product.oldPrice ? product.oldPrice + sizeExtra : null;
 
