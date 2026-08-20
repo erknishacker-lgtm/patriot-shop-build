@@ -1,14 +1,37 @@
-import { Link } from "@tanstack/react-router";
-import { ShoppingBag, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Loader2, ShoppingBag, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { useCart } from "@/hooks/use-cart";
 import { formatBRL } from "@/lib/format";
+import { buildYampiCheckoutUrl } from "@/lib/yampi";
+import { createYampiCheckout } from "@/lib/yampi.functions";
 import { QuantitySelector } from "./QuantitySelector";
 
 export function MiniCart() {
   const { items, isOpen, closeCart, removeItem, updateQuantity, subtotal, count } = useCart();
+  const [loading, setLoading] = useState(false);
+  const goToYampiCheckout = useServerFn(createYampiCheckout);
+
+  const handleCheckout = async () => {
+    const first = items[0];
+    if (!first) return;
+    const quantity = items.reduce((acc, i) => acc + i.quantity, 0);
+    setLoading(true);
+    try {
+      const result = await goToYampiCheckout({ data: { quantity, size: first.size } });
+      window.location.href = result.url;
+    } catch {
+      toast.error("Não foi possível abrir o checkout. Redirecionando...");
+      window.location.href = buildYampiCheckoutUrl({ quantity, size: first.size });
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
