@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  Banknote,
   Check,
-  CreditCard,
   Heart,
   Loader2 as Spinner,
   RotateCcw,
@@ -15,7 +13,6 @@ import { Button } from "@/components/ui/button";
 
 import { useCart } from "@/hooks/use-cart";
 import { useProduct } from "@/hooks/use-product";
-import { formatBRL } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { PriceBlock } from "./PriceBlock";
 import { ProductRating } from "./ProductRating";
