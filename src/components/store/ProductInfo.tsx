@@ -49,6 +49,7 @@ export function ProductInfo(props: Props) {
   const handleAddToCart = () => {
     if (!selectedSize) {
       setShowSizeError(true);
+      document.getElementById("size-selector")?.scrollIntoView({ behavior: "smooth", block: "center" });
       toast.error("Escolha um tamanho antes de continuar.");
       return;
     }
@@ -106,7 +107,7 @@ export function ProductInfo(props: Props) {
         }
       />
 
-      <div>
+      <div id="size-selector">
         <div className="flex items-baseline gap-2">
           <h2 className="text-[11px] font-semibold uppercase tracking-wider text-foreground">
             Tamanho
