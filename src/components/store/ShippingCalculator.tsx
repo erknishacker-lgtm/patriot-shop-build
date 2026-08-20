@@ -13,10 +13,8 @@ export function ShippingCalculator({ compact }: Props) {
   const [cep, setCep] = useState("");
   const { loading, error, options, calculate } = useShipping();
 
-  const Wrapper = compact ? "div" : "section";
-  const wrapperClass = compact
-    ? ""
-    : "mx-auto max-w-[1200px] px-4 py-12";
+
+
 
   if (compact) {
     return (
