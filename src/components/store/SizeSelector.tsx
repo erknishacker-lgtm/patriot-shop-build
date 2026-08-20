@@ -12,8 +12,8 @@ type Props = {
 export function SizeSelector({ sizes, selected, onSelect, error }: Props) {
   return (
     <fieldset>
-      <legend className="text-sm font-semibold text-foreground">Selecione a Opção</legend>
-      <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-6">
+      <legend className="sr-only">Selecione o tamanho</legend>
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
         {sizes.map((size) => {
           const isSelected = selected === size.label;
           return (
