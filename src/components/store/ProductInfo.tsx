@@ -153,12 +153,12 @@ export function ProductInfo(props: Props) {
         Total: <span className="font-bold text-brand-deep">{formatBRL(total)}</span>
       </p>
 
-      <div className="overflow-hidden rounded-xl border border-border">
-        <p className="flex items-center justify-center gap-2 border-b border-border bg-surface px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-          <CreditCard className="size-3.5" aria-hidden="true" />
+      <div className="overflow-hidden rounded-lg border border-border">
+        <p className="flex items-center justify-center gap-1.5 border-b border-border bg-surface px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+          <CreditCard className="size-3" aria-hidden="true" />
           Formas de pagamento
         </p>
-        <ul className="flex flex-wrap items-center justify-center gap-2 bg-card px-3 py-3">
+        <ul className="flex flex-wrap items-center justify-center gap-1.5 bg-card px-2 py-1.5">
           {[
             { Icon: CreditCard, label: "Cartão" },
             { Icon: Banknote, label: "Boleto" },
@@ -166,38 +166,38 @@ export function ProductInfo(props: Props) {
           ].map(({ Icon, label }) => (
             <li
               key={label}
-              className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-[11px] font-semibold text-muted-foreground"
+              className="flex items-center gap-1 rounded border border-border px-2 py-0.5 text-[10px] font-semibold text-muted-foreground"
             >
-              <Icon className="size-3.5" aria-hidden="true" />
+              <Icon className="size-3" aria-hidden="true" />
               {label}
             </li>
           ))}
         </ul>
       </div>
 
-      <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
+      <ul className="grid gap-1 overflow-hidden rounded-lg border border-border bg-card p-1.5 sm:grid-cols-3">
         {[
           {
             Icon: ShieldCheck,
-            title: "Pagamentos e informações estão seguros",
-            text: "Site oficial com todos os direitos reservados.",
+            title: "Pagamento seguro",
+            text: "Dados protegidos",
           },
           {
             Icon: Truck,
-            title: "Envio para todo o Brasil",
-            text: "Despacho rápido após a confirmação do pagamento, com código de rastreio.",
+            title: "Envio nacional",
+            text: "Com rastreio",
           },
           {
             Icon: RotateCcw,
-            title: "Devoluções facilitadas",
-            text: "7 dias após o recebimento para solicitar troca ou devolução.",
+            title: "Devolução fácil",
+            text: "7 dias úteis",
           },
         ].map(({ Icon, title, text }) => (
-          <li key={title} className="flex gap-3 px-3 py-3">
-            <Icon className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
+          <li key={title} className="flex items-center gap-1.5 rounded-md px-2 py-1.5">
+            <Icon className="size-3.5 shrink-0 text-brand" aria-hidden="true" />
             <div className="min-w-0">
-              <p className="text-xs font-semibold text-brand-deep">{title}</p>
-              <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{text}</p>
+              <p className="text-[10px] font-semibold leading-tight text-brand-deep">{title}</p>
+              <p className="text-[10px] leading-tight text-muted-foreground">{text}</p>
             </div>
           </li>
         ))}
