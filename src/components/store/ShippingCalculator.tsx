@@ -97,6 +97,6 @@ export function ShippingCalculator({ compact }: Props) {
           </div>
         </div>
       </div>
-    </section>
+    </Wrapper>
   );
 }
