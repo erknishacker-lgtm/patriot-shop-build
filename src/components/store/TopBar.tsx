@@ -1,26 +1,35 @@
-import { ArrowRight, BadgePercent, ShieldCheck, Truck } from "lucide-react";
+import { useEffect, useState } from "react";
+import { BadgePercent, ShieldCheck, TrendingUp, Truck, type LucideIcon } from "lucide-react";
+
+const messages: { icon: LucideIcon; text: string }[] = [
+  { icon: ShieldCheck, text: "Compra 100% segura" },
+  { icon: BadgePercent, text: "Frete grátis acima de R$ 299" },
+  { icon: TrendingUp, text: "Faça parte do movimento que mais cresce no Brasil" },
+  { icon: Truck, text: "Envio para todo o Brasil" },
+];
 
 export function TopBar() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % messages.length);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const current = messages[index % messages.length]!;
+  const Icon = current.icon;
+
   return (
     <div className="bg-brand-deep text-primary-foreground">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-center gap-4 px-4 py-2.5 text-center sm:justify-between">
-        <div className="hidden items-center gap-4 sm:flex">
-          <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground/80">
-            <ShieldCheck className="size-4 text-gold" aria-hidden="true" />
-            Compra 100% segura
-          </p>
-          <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground/80">
-            <BadgePercent className="size-4 text-gold" aria-hidden="true" />
-            Frete grátis acima de R$ 299
-          </p>
-        </div>
-        <p className="text-[11px] font-semibold tracking-wide sm:text-sm">
-          Faça parte do movimento que mais cresce no Brasil
-          <ArrowRight className="ml-1.5 inline size-3.5 text-gold" aria-hidden="true" />
-        </p>
-        <p className="hidden items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground/80 sm:flex">
-          <Truck className="size-4 text-gold" aria-hidden="true" />
-          Envio para todo o Brasil
+      <div className="mx-auto flex max-w-[1200px] items-center justify-center px-4 py-2.5 text-center">
+        <p
+          key={current.text}
+          className="flex animate-fade-in items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-primary-foreground/80 sm:text-xs"
+        >
+          <Icon className="size-4 text-gold" aria-hidden="true" />
+          {current.text}
         </p>
       </div>
     </div>
