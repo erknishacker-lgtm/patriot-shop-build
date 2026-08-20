@@ -32,10 +32,17 @@ export type Product = {
   price: number;
   /** Preço antigo (riscado). Deixe null quando não houver promoção. */
   oldPrice: number | null;
+  /** Desconto aplicado no pagamento via PIX (0.03 = 3%) */
+  pixDiscount: number;
+  /** Máximo de parcelas sem juros no cartão */
+  maxInstallments: number;
   images: { src: string; alt: string }[];
   sizes: ProductSize[];
   description: string[];
   specifications: ProductSpec[];
+  highlights: { title: string; text: string }[];
+  faq: { question: string; answer: string }[];
+  sizeChart: { size: string; chest: string; length: string; shoulder: string }[];
 };
 
 /**
@@ -53,7 +60,9 @@ export const product: Product = {
   brand: "Clube Bolsonaro",
   stock: 42,
   price: 239.8,
-  oldPrice: null,
+  oldPrice: 299.8,
+  pixDiscount: 0.03,
+  maxInstallments: 12,
   images: [
     { src: img1, alt: "Camiseta Clube Bolsonaro verde vista de frente" },
     { src: img2, alt: "Camiseta Clube Bolsonaro vista das costas no cabide" },
@@ -89,6 +98,59 @@ export const product: Product = {
       value: "Escudos em Alto Relevo Emborrachado 3D, DTF Localizado",
     },
     { label: "Fabricação", value: "Nacional" },
-    { label: "Envio", value: "Produto enviado com Nota Fiscal" },
+    { label: "Nota Fiscal", value: "Sim, todo pedido é enviado com Nota Fiscal" },
+  ],
+  highlights: [
+    {
+      title: "Tecido Dry 3D",
+      text: "Confortável, leve e adequado para o uso no dia a dia.",
+    },
+    {
+      title: "Alto Relevo 3D",
+      text: "Detalhes emborrachados que valorizam o acabamento da peça.",
+    },
+    {
+      title: "Identidade Marcante",
+      text: "Design desenvolvido para quem deseja vestir sua identidade e seus valores.",
+    },
+    {
+      title: "Fabricação Nacional",
+      text: "Produto fabricado no Brasil com controle de qualidade.",
+    },
+  ],
+  faq: [
+    { question: "Quais tamanhos estão disponíveis?", answer: "P, M, G, GG, G1 e G2." },
+    {
+      question: "Como escolher o tamanho?",
+      answer:
+        'Clique em "Consulte nossa tabela de medidas" antes de adicionar o produto ao carrinho e confira largura, comprimento e ombro de cada tamanho.',
+    },
+    {
+      question: "O produto possui Nota Fiscal?",
+      answer: "Sim. O pedido é enviado com Nota Fiscal.",
+    },
+    {
+      question: "Qual o prazo de envio?",
+      answer:
+        "O prazo varia conforme o CEP e a modalidade escolhida. Simule no calculador de frete desta página.",
+    },
+    { question: "Vocês enviam para todo o Brasil?", answer: "Sim, enviamos para todo o Brasil." },
+    {
+      question: "Quais formas de pagamento estão disponíveis?",
+      answer: "Pix, cartão de crédito em até 12x e boleto bancário.",
+    },
+    {
+      question: "Posso trocar o tamanho?",
+      answer:
+        "Sim. A troca por tamanho pode ser solicitada em até 7 dias corridos após o recebimento, com a peça sem uso e com etiqueta. Basta falar com o nosso atendimento para receber as instruções de envio.",
+    },
+  ],
+  sizeChart: [
+    { size: "P", chest: "50 cm", length: "70 cm", shoulder: "42 cm" },
+    { size: "M", chest: "52 cm", length: "72 cm", shoulder: "44 cm" },
+    { size: "G", chest: "54 cm", length: "74 cm", shoulder: "46 cm" },
+    { size: "GG", chest: "56 cm", length: "76 cm", shoulder: "48 cm" },
+    { size: "G1", chest: "60 cm", length: "78 cm", shoulder: "50 cm" },
+    { size: "G2", chest: "64 cm", length: "80 cm", shoulder: "52 cm" },
   ],
 };

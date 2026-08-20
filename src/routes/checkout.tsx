@@ -75,7 +75,7 @@ function CheckoutPage() {
 
   return (
     <StoreLayout>
-      <div className="mx-auto max-w-7xl px-4 pb-16">
+      <div className="mx-auto max-w-[1200px] px-4 pb-16">
         <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Checkout" }]} />
         <h1 className="text-2xl font-bold text-brand-deep sm:text-3xl">Finalizar compra</h1>
 
