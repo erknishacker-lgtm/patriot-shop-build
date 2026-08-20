@@ -164,4 +164,56 @@ export const product: Product = {
     { size: "G1", chest: "60 cm", length: "78 cm", shoulder: "50 cm" },
     { size: "G2", chest: "64 cm", length: "80 cm", shoulder: "52 cm" },
   ],
+  reviews: [
+    {
+      id: "r1",
+      author: "Carlos M.",
+      rating: 5,
+      date: "2026-07-12",
+      title: "Qualidade excelente",
+      content:
+        "A camiseta superou minhas expectativas. Tecido leve, costura reforçada e o escudo em alto relevo dá um acabamento premium.",
+      verified: true,
+    },
+    {
+      id: "r2",
+      author: "Fernanda R.",
+      rating: 5,
+      date: "2026-07-08",
+      title: "Entrega rápida e produto perfeito",
+      content:
+        "Chegou antes do prazo, com Nota Fiscal e embalagem protegida. O tamanho G1 serviu direitinho conforme a tabela.",
+      verified: true,
+    },
+    {
+      id: "r3",
+      author: "João P.",
+      rating: 4,
+      date: "2026-06-28",
+      title: "Muito boa",
+      content:
+        "Gostei bastante da estampa e do tecido. Só achei que a gola podia ser um pouco mais reforçada, mas no geral recomendo.",
+      verified: true,
+    },
+    {
+      id: "r4",
+      author: "Ana L.",
+      rating: 5,
+      date: "2026-06-15",
+      title: "Presente certeiro",
+      content:
+        "Comprei para presentear e a pessoa adorou. Identidade visual forte e cores vibrantes. Vou comprar mais.",
+      verified: false,
+    },
+    {
+      id: "r5",
+      author: "Marcos T.",
+      rating: 5,
+      date: "2026-05-30",
+      title: "Top demais",
+      content:
+        "Já é a terceira que compro. Caimento ótimo, não desbota na lavagem e o atendimento é nota 10.",
+      verified: true,
+    },
+  ],
 };
