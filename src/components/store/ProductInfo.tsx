@@ -37,9 +37,8 @@ export function ProductInfo(props: Props) {
   } = props;
   const [showSizeError, setShowSizeError] = useState(false);
   const [favorite, setFavorite] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [added, setAdded] = useState(false);
-  const goToYampiCheckout = useServerFn(createYampiCheckout);
+  const { addItem, openCart } = useCart();
 
   useEffect(() => {
     if (!added) return;
@@ -47,28 +46,25 @@ export function ProductInfo(props: Props) {
     return () => clearTimeout(timer);
   }, [added]);
 
-  const handleBuyNow = async () => {
+  const handleAddToCart = () => {
     if (!selectedSize) {
       setShowSizeError(true);
       toast.error("Escolha um tamanho antes de continuar.");
       return;
     }
-    setLoading(true);
-    try {
-      const result = await goToYampiCheckout({
-        data: { quantity, size: selectedSize },
-      });
-      setAdded(true);
-      toast.success("Redirecionando para o checkout seguro...", {
-        description: `${product.name} • Tamanho ${selectedSize} • ${quantity}x`,
-      });
-      window.location.href = result.url;
-    } catch {
-      toast.error("Não foi possível abrir o checkout. Tente novamente.");
-      window.location.href = buildYampiCheckoutUrl({ quantity, size: selectedSize });
-    } finally {
-      setLoading(false);
-    }
+    addItem({
+      productId: product.sku,
+      name: product.name,
+      image: product.images[0]?.src ?? "",
+      size: selectedSize,
+      unitPrice,
+      quantity,
+    });
+    setAdded(true);
+    toast.success("Produto adicionado ao carrinho", {
+      description: `${product.name} • Tamanho ${selectedSize} • ${quantity}x`,
+    });
+    openCart();
   };
 
 
