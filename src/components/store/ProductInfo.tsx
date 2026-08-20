@@ -55,7 +55,7 @@ export function ProductInfo() {
     <div className="flex flex-col gap-6">
       <div>
         {product.badge && (
-          <span className="inline-flex items-center rounded-full gold-gradient px-3 py-1 text-[11px] font-bold tracking-[0.12em] text-gold-foreground">
+          <span className="inline-flex items-center rounded-full bg-gradient-to-br from-gold to-gold-strong px-3 py-1 text-[11px] font-bold tracking-[0.12em] text-gold-foreground">
             {product.badge}
           </span>
         )}

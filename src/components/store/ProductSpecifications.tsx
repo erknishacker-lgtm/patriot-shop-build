@@ -6,7 +6,7 @@ export function ProductSpecifications({ specs }: { specs: ProductSpec[] }) {
       <h2 id="specs-titulo" className="text-xl font-bold text-brand-deep sm:text-2xl">
         Especificações
       </h2>
-      <span className="mt-3 block h-1 w-16 rounded-full gold-gradient" aria-hidden="true" />
+      <span className="mt-3 block h-1 w-16 rounded-full bg-gradient-to-br from-gold to-gold-strong" aria-hidden="true" />
       <dl className="mt-6 grid gap-3 sm:grid-cols-2">
         {specs.map((spec) => (
           <div
