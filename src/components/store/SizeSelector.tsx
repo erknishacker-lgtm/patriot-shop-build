@@ -24,7 +24,7 @@ export function SizeSelector({ sizes, selected, onSelect, error }: Props) {
               aria-pressed={isSelected}
               onClick={() => onSelect(size.label)}
               className={cn(
-                "flex h-16 flex-col items-center justify-center rounded-xl border-2 px-1 text-sm font-semibold transition-all duration-200",
+                "flex h-8 flex-col items-center justify-center rounded-lg border-2 px-1 text-[10px] font-semibold transition-all duration-200",
                 isSelected
                   ? "border-brand bg-brand text-primary-foreground shadow-[var(--shadow-card)]"
                   : "border-border bg-card text-foreground hover:border-brand/50 hover:bg-brand-soft/50",
