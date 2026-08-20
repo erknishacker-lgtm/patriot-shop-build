@@ -153,6 +153,7 @@ export function ProductInfo(props: Props) {
       </div>
 
       <Button
+        id="cta-add-cart"
         variant="cta"
         size="xl"
         className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
