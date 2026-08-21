@@ -1,15 +1,17 @@
 import { Link } from "@tanstack/react-router";
+import { useStore } from "@/hooks/use-store";
 
 const PAYMENTS = ["Pix", "Visa", "Mastercard", "Elo", "Boleto"];
 
 export function Footer() {
+  const store = useStore();
   return (
     <footer className="bg-brand-deep text-primary-foreground">
       <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-5 px-4 py-8 text-center">
-        <Link to="/" aria-label="Clube Bolsonaro — início">
+        <Link to="/" aria-label={`${store.name} — início`}>
           <img
-            src="/brand/clube-bolsonaro.png"
-            alt="Clube Bolsonaro"
+            src={store.logoOnDarkSrc}
+            alt={store.name}
             className="mx-auto h-11 w-auto object-contain sm:h-14"
           />
         </Link>
@@ -31,7 +33,7 @@ export function Footer() {
           className="h-10 w-auto object-contain opacity-95 sm:h-12"
         />
 
-        <p className="text-[11px] text-primary-foreground/55">© 2026 Clube Bolsonaro</p>
+        <p className="text-[11px] text-primary-foreground/55">{store.footerNote}</p>
       </div>
     </footer>
   );

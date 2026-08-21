@@ -4,6 +4,7 @@ import { Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { Button } from "@/components/ui/button";
+import { useStore } from "@/hooks/use-store";
 import { adminDeleteProduct, adminListProducts } from "@/lib/admin.functions";
 import { type ProductRecord } from "@/lib/products";
 import { formatBRL } from "@/lib/format";
@@ -14,13 +15,14 @@ export const Route = createFileRoute("/a8f3c91e7b2d4f06/estoque/")({
 });
 
 function EstoqueListPage() {
+  const store = useStore();
   const [items, setItems] = useState<ProductRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
   const load = async () => {
     setLoading(true);
     try {
-      setItems(await adminListProducts());
+      setItems(await adminListProducts({ data: { catalogBrand: store.catalogBrand } }));
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Não deu para ler o estoque.");
     } finally {
@@ -30,7 +32,9 @@ function EstoqueListPage() {
 
   useEffect(() => {
     void load();
-  }, []);
+    // Recarrega quando troca a loja (subdomínio ou ?loja=).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [store.catalogBrand]);
 
   const remove = async (product: ProductRecord) => {
     if (!window.confirm(`Apagar “${product.name}”? Isso tira o produto da loja.`)) return;
@@ -60,7 +64,7 @@ function EstoqueListPage() {
           <p className="p-6 text-sm text-muted-foreground">Carregando estoque…</p>
         ) : items.length === 0 ? (
           <p className="p-6 text-sm text-muted-foreground">
-            Nenhum produto no cofre ainda. Cadastre o primeiro.
+            Nenhum produto nesta loja ainda. Cadastre o primeiro — as outras lojas não aparecem aqui.
           </p>
         ) : (
           <div className="overflow-x-auto">

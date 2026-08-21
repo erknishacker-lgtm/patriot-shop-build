@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ADMIN_EMAIL } from "@/lib/admin";
 import { getAdminSession, loginAdmin } from "@/lib/admin.functions";
 import { clearBrowserAuthJunk } from "@/lib/clear-browser-auth";
+import { useStore } from "@/hooks/use-store";
 import { getSupabaseConfig } from "@/lib/supabase";
 
 export const Route = createFileRoute("/a8f3c91e7b2d4f06/")({
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/a8f3c91e7b2d4f06/")({
 });
 
 function InternalLoginPage() {
+  const store = useStore();
   const navigate = useNavigate();
   const configured = Boolean(getSupabaseConfig());
   const [email, setEmail] = useState(ADMIN_EMAIL);
@@ -55,12 +57,12 @@ function InternalLoginPage() {
       <div className="w-full max-w-md rounded-2xl bg-background p-6 shadow-[var(--shadow-card)] sm:p-8">
         <div className="mb-6 flex items-center gap-3">
           <span className="grid size-10 place-items-center rounded-lg bg-brand-deep">
-            <span className="font-display text-sm font-bold text-gold">CB</span>
+            <span className="font-display text-[10px] font-bold text-gold">{store.shortName}</span>
           </span>
           <div>
             <p className="font-display text-lg font-bold text-brand-deep">Acesso interno</p>
             <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
-              Estoque da loja
+              Estoque {store.name}
             </p>
           </div>
         </div>

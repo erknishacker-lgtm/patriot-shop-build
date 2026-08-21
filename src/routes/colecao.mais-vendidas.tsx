@@ -2,33 +2,38 @@ import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronDown, CreditCard } from "lucide-react";
 import { Breadcrumbs } from "@/components/store/Breadcrumbs";
+import { BenefitsStrip } from "@/components/store/BenefitsStrip";
+import { StoreEmpty } from "@/components/store/StoreEmpty";
 import { StoreLayout } from "@/components/store/StoreLayout";
 import { TrustBlock } from "@/components/store/TrustBlock";
-import { BenefitsStrip } from "@/components/store/BenefitsStrip";
 import { type CollectionProduct } from "@/data/collections";
 import { formatBRL } from "@/lib/format";
 import { fetchPublishedProducts, toCollectionProduct } from "@/lib/products";
+import { resolveStoreKey } from "@/lib/resolve-store-key";
+import { STORES } from "@/lib/stores";
 import { cn } from "@/lib/utils";
-
-const TITLE = "Mais Vendidas | Clube Bolsonaro";
-const DESCRIPTION =
-  "Coleção Mais Vendidas do Clube Bolsonaro: camisetas patrióticas em tecido Dry 3D, com descontos, parcelamento em até 12x e envio para todo o Brasil.";
 
 export const Route = createFileRoute("/colecao/mais-vendidas")({
   loader: async () => {
-    const products = await fetchPublishedProducts();
-    return { items: products.map(toCollectionProduct) };
+    const storeKey = await resolveStoreKey();
+    const products = await fetchPublishedProducts(storeKey);
+    return { items: products.map(toCollectionProduct), storeKey };
   },
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const store = STORES[loaderData?.storeKey ?? "patriot"];
+    const title = `Mais Vendidas | ${store.name}`;
+    const description = store.description;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
   component: CollectionPage,
 });
 
@@ -157,7 +162,8 @@ function ProductCard({ item }: { item: CollectionProduct }) {
 }
 
 function CollectionPage() {
-  const { items: catalog } = Route.useLoaderData();
+  const { items: catalog, storeKey } = Route.useLoaderData();
+  const store = STORES[storeKey];
   const [sort, setSort] = useState<SortKey>("mais-vendidos");
   const [onlyInStock, setOnlyInStock] = useState(false);
   const [ranges, setRanges] = useState<string[]>([]);
@@ -177,6 +183,8 @@ function CollectionPage() {
     return sorted;
   }, [catalog, onlyInStock, ranges, sort]);
 
+  if (catalog.length === 0) return <StoreEmpty />;
+
   return (
     <StoreLayout>
       <div className="mx-auto max-w-[1200px] px-4">
@@ -187,8 +195,7 @@ function CollectionPage() {
             Mais Vendidas
           </h1>
           <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-            As peças preferidas dos patriotas: tecido Dry 3D, acabamento premium e envio para todo o
-            Brasil.
+            {store.collectionLead}
           </p>
         </header>
 

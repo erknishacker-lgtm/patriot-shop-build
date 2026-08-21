@@ -1,17 +1,21 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 import { ProductPageView } from "@/components/store/ProductPageView";
 import { fetchProductBySlug } from "@/lib/products";
+import { resolveStoreKey } from "@/lib/resolve-store-key";
+import { STORES } from "@/lib/stores";
 
 export const Route = createFileRoute("/produto/$slug")({
   loader: async ({ params }) => {
-    const product = await fetchProductBySlug(params.slug);
+    const storeKey = await resolveStoreKey();
+    const product = await fetchProductBySlug(params.slug, storeKey);
     if (!product) throw notFound();
-    return { product };
+    return { product, storeKey };
   },
   head: ({ loaderData }) => {
+    const store = STORES[loaderData?.storeKey ?? "patriot"];
     const product = loaderData?.product;
-    const title = product ? `${product.name} | Loja Oficial` : "Produto | Loja Oficial";
-    const description = product?.description[0] ?? "Produto da loja oficial Clube Bolsonaro.";
+    const title = product ? `${product.name} | ${store.name}` : `Produto | ${store.name}`;
+    const description = product?.description[0] ?? store.description;
     return {
       meta: [
         { title },

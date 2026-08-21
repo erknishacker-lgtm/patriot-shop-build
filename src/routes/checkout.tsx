@@ -10,23 +10,30 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/hooks/use-cart";
 import { formatBRL, maskCep, maskPhone } from "@/lib/format";
+import { resolveStoreKey } from "@/lib/resolve-store-key";
+import { STORES } from "@/lib/stores";
 import { cn } from "@/lib/utils";
 
-const TITLE = "Checkout | Clube Bolsonaro";
-const DESCRIPTION =
-  "Finalize sua compra na loja oficial Clube Bolsonaro: dados de entrega, forma de pagamento e resumo do pedido.";
-
 export const Route = createFileRoute("/checkout")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:type", content: "website" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  loader: async () => {
+    const storeKey = await resolveStoreKey();
+    return { storeKey };
+  },
+  head: ({ loaderData }) => {
+    const store = STORES[loaderData?.storeKey ?? "patriot"];
+    const title = `Checkout | ${store.name}`;
+    const description = `Finalize sua compra na ${store.name}: dados de entrega, forma de pagamento e resumo do pedido.`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { name: "robots", content: "noindex" },
+      ],
+    };
+  },
   component: CheckoutPage,
 });
 

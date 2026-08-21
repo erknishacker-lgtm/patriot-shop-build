@@ -7,6 +7,7 @@ import type {
 import { product as fallbackProduct } from "@/data/product";
 import { getSupabase } from "@/lib/supabase";
 import type { CollectionProduct } from "@/data/collections";
+import { STORES, type StoreKey } from "@/lib/stores";
 
 export type ProductRecord = Product & {
   published: boolean;
@@ -133,29 +134,40 @@ function asFallbackRecord(source: Product = fallbackProduct): ProductRecord {
   };
 }
 
-export async function fetchPublishedProducts(): Promise<ProductRecord[]> {
+export async function fetchPublishedProducts(
+  storeKey: StoreKey = "patriot",
+): Promise<ProductRecord[]> {
+  const store = STORES[storeKey];
   const supabase = getSupabase();
-  if (!supabase) return [asFallbackRecord()];
+  if (!supabase) return storeKey === "patriot" ? [asFallbackRecord()] : [];
 
   const { data, error } = await supabase
     .from("products")
     .select("*")
     .eq("published", true)
+    .eq("brand", store.catalogBrand)
     .order("rank", { ascending: true });
 
-  if (error) return [asFallbackRecord()];
+  if (error) return storeKey === "patriot" ? [asFallbackRecord()] : [];
   return ((data ?? []) as ProductRow[]).map(rowToProduct);
 }
 
-export async function fetchFeaturedProduct(): Promise<ProductRecord> {
-  const list = await fetchPublishedProducts();
-  return list[0] ?? asFallbackRecord();
+export async function fetchFeaturedProduct(
+  storeKey: StoreKey = "patriot",
+): Promise<ProductRecord | null> {
+  const list = await fetchPublishedProducts(storeKey);
+  if (list.length) return list[0] ?? null;
+  return storeKey === "patriot" ? asFallbackRecord() : null;
 }
 
-export async function fetchProductBySlug(slug: string): Promise<ProductRecord | null> {
+export async function fetchProductBySlug(
+  slug: string,
+  storeKey: StoreKey = "patriot",
+): Promise<ProductRecord | null> {
+  const store = STORES[storeKey];
   const supabase = getSupabase();
   if (!supabase) {
-    return fallbackProduct.slug === slug ? asFallbackRecord() : null;
+    return storeKey === "patriot" && fallbackProduct.slug === slug ? asFallbackRecord() : null;
   }
 
   const { data, error } = await supabase
@@ -163,16 +175,17 @@ export async function fetchProductBySlug(slug: string): Promise<ProductRecord | 
     .select("*")
     .eq("slug", slug)
     .eq("published", true)
+    .eq("brand", store.catalogBrand)
     .maybeSingle();
 
   if (error || !data) {
-    if (fallbackProduct.slug === slug) return asFallbackRecord();
+    if (storeKey === "patriot" && fallbackProduct.slug === slug) return asFallbackRecord();
     return null;
   }
   return rowToProduct(data as ProductRow);
 }
 
-export function emptyProduct(): ProductRecord {
+export function emptyProduct(catalogBrand = "Clube Bolsonaro"): ProductRecord {
   return {
     id: "",
     slug: "",
@@ -181,7 +194,7 @@ export function emptyProduct(): ProductRecord {
     categorySlug: "vestuario",
     badge: "DESTAQUE",
     sku: "",
-    brand: "Clube Bolsonaro",
+    brand: catalogBrand,
     stock: 0,
     price: 0,
     oldPrice: null,
@@ -197,7 +210,7 @@ export function emptyProduct(): ProductRecord {
       { label: "G2", extra: 19.15, available: true, checkoutUrl: "" },
     ],
     description: [""],
-    specifications: [{ label: "Marca", value: "Clube Bolsonaro" }],
+    specifications: [{ label: "Marca", value: catalogBrand }],
     highlights: [{ title: "", text: "" }],
     faq: [{ question: "", answer: "" }],
     sizeChart: [

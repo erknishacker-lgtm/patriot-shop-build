@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Check, Star, ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
 import type { ProductReview } from "@/data/product";
 
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export function ProductReviews({ reviews }: Props) {
+  const store = useStore();
   const [showAll, setShowAll] = useState(false);
   if (!reviews.length) return null;
 
@@ -32,7 +34,7 @@ export function ProductReviews({ reviews }: Props) {
               Avaliações de quem comprou
             </h2>
             <p className="text-sm text-muted-foreground">
-              Confira a opinião de clientes que já vestem a Camiseta Clube Bolsonaro
+              {store.reviewsLead}
             </p>
           </div>
         </div>

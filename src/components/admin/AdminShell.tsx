@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { LogOut, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ADMIN_EMAIL } from "@/lib/admin";
+import { useStore } from "@/hooks/use-store";
 import { logoutAdmin } from "@/lib/admin.functions";
 
 export function AdminShell({
@@ -13,6 +13,7 @@ export function AdminShell({
   title: string;
   action?: React.ReactNode;
 }) {
+  const store = useStore();
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -29,9 +30,9 @@ export function AdminShell({
               <Package className="size-4 text-gold" />
             </span>
             <span className="leading-tight">
-              <span className="block font-display text-sm font-bold">Estoque interno</span>
+              <span className="block font-display text-sm font-bold">{store.name}</span>
               <span className="block text-[10px] uppercase tracking-[0.16em] text-brand-foreground/70">
-                {ADMIN_EMAIL}
+                Estoque interno
               </span>
             </span>
           </Link>

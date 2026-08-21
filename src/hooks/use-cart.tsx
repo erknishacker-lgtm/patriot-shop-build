@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { storeFromHost } from "@/lib/stores";
 
 export type CartItem = {
   /** id único: produto + tamanho */
@@ -33,7 +34,13 @@ type CartContextValue = {
   clear: () => void;
 };
 
-const STORAGE_KEY = "clube-bolsonaro:cart";
+function cartStorageKey() {
+  const storeKey =
+    typeof window === "undefined"
+      ? "patriot"
+      : storeFromHost(window.location.hostname, window.location.search);
+  return `stampabr:${storeKey}:cart`;
+}
 
 const CartContext = createContext<CartContextValue | null>(null);
 
@@ -44,7 +51,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
+      const raw = window.localStorage.getItem(cartStorageKey());
       if (raw) setItems(JSON.parse(raw) as CartItem[]);
     } catch {
       /* ignora storage indisponível */
@@ -55,7 +62,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!hydrated) return;
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      window.localStorage.setItem(cartStorageKey(), JSON.stringify(items));
     } catch {
       /* ignora storage indisponível */
     }

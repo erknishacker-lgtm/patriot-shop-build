@@ -11,9 +11,12 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { CartProvider } from "@/hooks/use-cart";
+import { StoreProvider } from "@/hooks/use-store";
 import { MetaPixel } from "@/components/store/MetaPixel";
 import { Toaster } from "@/components/ui/sonner";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { resolveStoreKey } from "@/lib/resolve-store-key";
+import { STORE_BOOT_SCRIPT } from "@/lib/stores";
 
 function NotFoundComponent() {
   return (
@@ -76,6 +79,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  loader: async () => ({ storeKey: await resolveStoreKey() }),
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -112,8 +116,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: STORE_BOOT_SCRIPT }} />
         <HeadContent />
       </head>
       <body>
@@ -126,15 +131,18 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { storeKey } = Route.useLoaderData();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <MetaPixel />
-        <Toaster position="top-center" richColors />
-      </CartProvider>
+      <StoreProvider initialKey={storeKey}>
+        <CartProvider>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+          <MetaPixel />
+          <Toaster position="top-center" richColors />
+        </CartProvider>
+      </StoreProvider>
     </QueryClientProvider>
   );
 }

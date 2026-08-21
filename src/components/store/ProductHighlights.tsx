@@ -1,16 +1,18 @@
 import { Factory, Layers, Shirt, Sparkles } from "lucide-react";
 import type { Product } from "@/data/product";
+import { useStore } from "@/hooks/use-store";
 
 const ICONS = [Shirt, Layers, Sparkles, Factory];
 
 export function ProductHighlights({ items }: { items: Product["highlights"] }) {
+  const store = useStore();
   return (
     <section aria-labelledby="beneficios-produto" className="mx-auto max-w-[1200px] px-4 py-12">
       <h2
         id="beneficios-produto"
         className="text-center font-display text-2xl font-bold text-brand-deep sm:text-3xl"
       >
-        Por que escolher a Camiseta Clube Bolsonaro?
+        {store.highlightTitle}
       </h2>
       <span
         className="mx-auto mt-3 block h-1 w-16 rounded-full bg-gold"

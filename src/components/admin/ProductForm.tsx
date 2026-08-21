@@ -145,7 +145,7 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
         slug: slugify(draft.slug) || slugify(draft.name),
         category: draft.category.trim() || "Vestuário",
         categorySlug: slugify(draft.category) || "vestuario",
-        brand: draft.brand.trim() || "Clube Bolsonaro",
+        brand: draft.brand.trim() || initial.brand,
         description: draft.description.map((p) => p.trim()).filter(Boolean),
         specifications: draft.specifications.filter((s) => s.label.trim() && s.value.trim()),
         highlights: draft.highlights.filter((h) => h.title.trim() && h.text.trim()),
@@ -232,7 +232,7 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
           <Field label="Categoria">
             <Input value={draft.category} onChange={(e) => patch({ category: e.target.value })} />
           </Field>
-          <Field label="Marca">
+          <Field label="Marca (separa as lojas)">
             <Input value={draft.brand} onChange={(e) => patch({ brand: e.target.value })} />
           </Field>
           <Field label="Selo (ex.: DESTAQUE)">

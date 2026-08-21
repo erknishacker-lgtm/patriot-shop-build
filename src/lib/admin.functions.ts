@@ -163,16 +163,22 @@ export const getAdminSession = createServerFn({ method: "POST" }).handler(async 
   }
 });
 
-export const adminListProducts = createServerFn({ method: "POST" }).handler(async () => {
-  const { supabase } = await requireAdmin();
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .order("rank", { ascending: true })
-    .order("created_at", { ascending: false });
-  if (error) throw new Error(error.message);
-  return ((data ?? []) as ProductRow[]).map(rowToProduct);
-});
+export const adminListProducts = createServerFn({ method: "POST" })
+  .inputValidator((input: { catalogBrand?: string }) => ({
+    catalogBrand: String(input?.catalogBrand ?? "").trim(),
+  }))
+  .handler(async ({ data }) => {
+    const { supabase } = await requireAdmin();
+    let query = supabase
+      .from("products")
+      .select("*")
+      .order("rank", { ascending: true })
+      .order("created_at", { ascending: false });
+    if (data.catalogBrand) query = query.eq("brand", data.catalogBrand);
+    const { data: rows, error } = await query;
+    if (error) throw new Error(error.message);
+    return ((rows ?? []) as ProductRow[]).map(rowToProduct);
+  });
 
 export const adminGetProduct = createServerFn({ method: "POST" })
   .inputValidator((input: { id?: string }) => ({

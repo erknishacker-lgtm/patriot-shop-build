@@ -1,17 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductPageView } from "@/components/store/ProductPageView";
+import { StoreEmpty } from "@/components/store/StoreEmpty";
 import { fetchFeaturedProduct } from "@/lib/products";
+import { resolveStoreKey } from "@/lib/resolve-store-key";
+import { STORES } from "@/lib/stores";
 
 export const Route = createFileRoute("/")({
-  loader: async () => ({ product: await fetchFeaturedProduct() }),
+  loader: async () => {
+    const storeKey = await resolveStoreKey();
+    return { product: await fetchFeaturedProduct(storeKey), storeKey };
+  },
   head: ({ loaderData }) => {
+    const store = STORES[loaderData?.storeKey ?? "patriot"];
     const product = loaderData?.product;
-    const title = product
-      ? `${product.name} | Loja Oficial`
-      : "Camiseta Clube Bolsonaro | Loja Oficial";
-    const description =
-      product?.description[0] ??
-      "Loja oficial Clube Bolsonaro: vestuário com identidade patriótica, tecido Dry 3D e envio para todo o Brasil.";
+    const title = product ? `${product.name} | ${store.name}` : store.title;
+    const description = product?.description[0] ?? store.description;
     return {
       meta: [
         { title },
@@ -28,5 +31,6 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const { product } = Route.useLoaderData();
+  if (!product) return <StoreEmpty />;
   return <ProductPageView product={product} />;
 }
