@@ -1,5 +1,9 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
+/** Chave pública (publishable). Pode ir no site; o cadeado do banco (RLS) que protege. */
+const PUBLIC_SUPABASE_URL = "https://jycmajdulenpuotzecch.supabase.co";
+const PUBLIC_SUPABASE_ANON_KEY = "sb_publishable_ll9MQUrsrTTopTokKuk9ag_O9Sky5uL";
+
 function readEnv(name: "VITE_SUPABASE_URL" | "VITE_SUPABASE_ANON_KEY"): string | undefined {
   const fromVite = import.meta.env[name];
   if (fromVite) return fromVite;
@@ -8,8 +12,8 @@ function readEnv(name: "VITE_SUPABASE_URL" | "VITE_SUPABASE_ANON_KEY"): string |
 }
 
 export function getSupabaseConfig() {
-  const url = readEnv("VITE_SUPABASE_URL")?.trim();
-  const anonKey = readEnv("VITE_SUPABASE_ANON_KEY")?.trim();
+  const url = readEnv("VITE_SUPABASE_URL")?.trim() || PUBLIC_SUPABASE_URL;
+  const anonKey = readEnv("VITE_SUPABASE_ANON_KEY")?.trim() || PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !anonKey) return null;
   return { url, anonKey };
 }
