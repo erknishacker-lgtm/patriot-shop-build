@@ -25,10 +25,7 @@ export function Footer() {
           ))}
         </ul>
 
-        <div className="space-y-1 text-[11px] leading-relaxed text-primary-foreground/55">
-          <p>CAPITAO STORE BRASIL LTDA · CNPJ 66.716.746/0001-04</p>
-          <p>© 2026 Clube Bolsonaro</p>
-        </div>
+        <p className="text-[11px] text-primary-foreground/55">© 2026 Clube Bolsonaro</p>
       </div>
     </footer>
   );
