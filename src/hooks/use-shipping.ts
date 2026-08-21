@@ -26,7 +26,10 @@ export function useShipping() {
     try {
       const result = await quoteShipping({ data: { cep } });
       if (!result.options || result.options.length === 0) {
-        setError("Não encontramos opções de entrega para este CEP.");
+        setError(
+          ("error" in result && result.error) ||
+            "Não encontramos opções de entrega para este CEP.",
+        );
         setOptions(null);
       } else {
         setOptions(result.options);
