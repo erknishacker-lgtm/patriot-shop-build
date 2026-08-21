@@ -11,6 +11,21 @@ export type CheckoutItem = { size: string; quantity: number };
  */
 export const YAMPI_SKU_BY_SIZE: Record<string, string> = {};
 
+export function applyCheckoutParams(url: string, size: string, quantity: number) {
+  try {
+    const parsed = new URL(url);
+    if (quantity > 0 && !parsed.searchParams.has("quantity")) {
+      parsed.searchParams.set("quantity", String(quantity));
+    }
+    if (size && !parsed.searchParams.has("tamanho") && !parsed.searchParams.has("size")) {
+      parsed.searchParams.set("tamanho", size);
+    }
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}
+
 /** Link de fallback (sem API), preservando tamanho e quantidade. */
 export function buildYampiCheckoutUrl(items: CheckoutItem[]) {
   const url = new URL(YAMPI_CHECKOUT_URL);

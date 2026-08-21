@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 
 import { useCart } from "@/hooks/use-cart";
 import { useProduct } from "@/hooks/use-product";
+import { applyCheckoutParams } from "@/lib/yampi";
 import { cn } from "@/lib/utils";
 import { PriceBlock } from "./PriceBlock";
 import { ProductRating } from "./ProductRating";
@@ -46,11 +47,17 @@ export function ProductInfo(props: Props) {
     return () => clearTimeout(timer);
   }, [added]);
 
+  const checkoutUrl = product.checkoutUrl?.trim() ?? "";
+
   const handleAddToCart = () => {
     if (!selectedSize) {
       setShowSizeError(true);
       document.getElementById("size-selector")?.scrollIntoView({ behavior: "smooth", block: "center" });
       toast.error("Escolha um tamanho antes de continuar.");
+      return;
+    }
+    if (checkoutUrl) {
+      window.location.href = applyCheckoutParams(checkoutUrl, selectedSize, quantity);
       return;
     }
     addItem({
@@ -60,6 +67,7 @@ export function ProductInfo(props: Props) {
       size: selectedSize,
       unitPrice,
       quantity,
+      ...(checkoutUrl ? { checkoutUrl } : {}),
     });
     setAdded(true);
     toast.success("Produto adicionado ao carrinho", {
@@ -135,7 +143,7 @@ export function ProductInfo(props: Props) {
         onClick={handleAddToCart}
       >
         {added ? <Check className="animate-in zoom-in" /> : <ShoppingCart />}
-        {added ? "ADICIONADO" : "ADICIONAR AO CARRINHO"}
+        {added ? "ADICIONADO" : checkoutUrl ? "COMPRAR AGORA" : "ADICIONAR AO CARRINHO"}
 
 
       </Button>

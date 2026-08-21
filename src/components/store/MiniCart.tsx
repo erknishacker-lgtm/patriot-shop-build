@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { useCart } from "@/hooks/use-cart";
 import { formatBRL } from "@/lib/format";
-import { buildYampiCheckoutUrl } from "@/lib/yampi";
+import { applyCheckoutParams, buildYampiCheckoutUrl } from "@/lib/yampi";
 import { createYampiCheckout } from "@/lib/yampi.functions";
 import { QuantitySelector } from "./QuantitySelector";
 
@@ -18,6 +18,15 @@ export function MiniCart() {
 
   const handleCheckout = async () => {
     if (items.length === 0) return;
+    const withLink = items.find((item) => item.checkoutUrl?.trim());
+    if (withLink?.checkoutUrl) {
+      window.location.href = applyCheckoutParams(
+        withLink.checkoutUrl,
+        withLink.size,
+        withLink.quantity,
+      );
+      return;
+    }
     const payload = items.map((i) => ({ size: i.size, quantity: i.quantity }));
     setLoading(true);
     try {

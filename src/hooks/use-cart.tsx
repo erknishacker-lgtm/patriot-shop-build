@@ -17,6 +17,7 @@ export type CartItem = {
   size: string;
   unitPrice: number;
   quantity: number;
+  checkoutUrl?: string;
 };
 
 type CartContextValue = {

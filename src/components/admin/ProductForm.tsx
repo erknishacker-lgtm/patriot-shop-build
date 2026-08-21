@@ -212,6 +212,17 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
           <Field label="SKU">
             <Input value={draft.sku} onChange={(e) => patch({ sku: e.target.value })} />
           </Field>
+          <Field label="Link do botão de compra" className="sm:col-span-2">
+            <Input
+              type="url"
+              placeholder="https://… link de checkout deste produto"
+              value={draft.checkoutUrl}
+              onChange={(e) => patch({ checkoutUrl: e.target.value })}
+            />
+            <span className="text-xs font-normal normal-case tracking-normal text-muted-foreground">
+              Cada produto tem o próprio checkout. Cole aqui o link da Yampi (ou outro) desta peça.
+            </span>
+          </Field>
           <Field label="Endereço na loja (slug)">
             <Input
               value={draft.slug}

@@ -29,6 +29,7 @@ create table if not exists public.products (
   faq jsonb not null default '[]'::jsonb,
   size_chart jsonb not null default '[]'::jsonb,
   reviews jsonb not null default '[]'::jsonb,
+  checkout_url text,
   rank integer not null default 100,
   published boolean not null default true,
   created_at timestamptz not null default now(),

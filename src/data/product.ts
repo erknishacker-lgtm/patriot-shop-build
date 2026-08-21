@@ -54,6 +54,8 @@ export type Product = {
   faq: { question: string; answer: string }[];
   sizeChart: { size: string; chest: string; length: string; shoulder: string }[];
   reviews: ProductReview[];
+  /** Link do botão de compra / checkout deste produto */
+  checkoutUrl: string;
 };
 
 /**
@@ -163,6 +165,7 @@ export const product: Product = {
     { size: "G1", chest: "58 cm", length: "77 cm", shoulder: "46 cm" },
     { size: "G2", chest: "61 cm", length: "79 cm", shoulder: "48 cm" },
   ],
+  checkoutUrl: "",
   reviews: [
     {
       id: "r1",

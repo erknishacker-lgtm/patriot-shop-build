@@ -4,6 +4,18 @@ import { slugify } from "@/lib/slug";
 
 export type ParsedProduct = Product & { published: boolean; rank: number };
 
+export function safeCheckoutUrl(src: string): string {
+  const value = src.trim();
+  if (!value) return "";
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:") return "";
+    return url.toString();
+  } catch {
+    return "";
+  }
+}
+
 export function safeImageSrc(src: string): string | null {
   const value = src.trim();
   if (!value || value.length > 2000) return null;
@@ -85,6 +97,7 @@ export const productInputSchema = z.object({
   faq: z.array(faqSchema).max(20),
   sizeChart: z.array(chartSchema).max(20),
   reviews: z.array(reviewSchema).max(50),
+  checkoutUrl: z.string().trim().max(2000).optional(),
   rank: z.number().int().min(0).max(100_000),
   published: z.boolean(),
 });
@@ -123,6 +136,7 @@ export function parseProductInput(input: unknown, isNew: boolean): ParsedProduct
     highlights: parsed.highlights,
     faq: parsed.faq,
     sizeChart: parsed.sizeChart,
+    checkoutUrl: safeCheckoutUrl(parsed.checkoutUrl ?? ""),
     reviews: parsed.reviews
       .map((review) => ({
         ...review,

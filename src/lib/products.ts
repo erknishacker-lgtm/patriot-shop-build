@@ -35,6 +35,7 @@ export type ProductRow = {
   faq: Product["faq"] | null;
   size_chart: Product["sizeChart"] | null;
   reviews: ProductReview[] | null;
+  checkout_url: string | null;
   rank: number;
   published: boolean;
 };
@@ -70,6 +71,7 @@ export function rowToProduct(row: ProductRow): ProductRecord {
       ...review,
       photos: Array.isArray(review.photos) ? review.photos : [],
     })),
+    checkoutUrl: row.checkout_url?.trim() ?? "",
     rank: num(row.rank, 100),
     published: row.published !== false,
   };
@@ -97,6 +99,7 @@ export function productToRow(product: ProductRecord) {
     faq: product.faq,
     size_chart: product.sizeChart,
     reviews: product.reviews,
+    checkout_url: product.checkoutUrl.trim() || null,
     rank: product.rank,
     published: product.published,
   };
@@ -202,6 +205,7 @@ export function emptyProduct(): ProductRecord {
       { size: "G2", chest: "", length: "", shoulder: "" },
     ],
     reviews: [],
+    checkoutUrl: "",
     published: true,
     rank: 100,
   };

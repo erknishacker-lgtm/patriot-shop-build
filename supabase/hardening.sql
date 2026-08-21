@@ -1,6 +1,8 @@
 -- Reforço de segurança no cofre já existente.
 -- Pode rodar mais de uma vez.
 
+alter table public.products add column if not exists checkout_url text;
+
 create schema if not exists private;
 
 create or replace function private.is_admin()
