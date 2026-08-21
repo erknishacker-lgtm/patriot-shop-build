@@ -11,6 +11,7 @@ export type CollectionProduct = {
   inStock: boolean;
   /** Ordem de mais vendidos (menor = mais vendido) */
   rank: number;
+  slug?: string;
   to?: string;
 };
 
@@ -25,6 +26,7 @@ export const bestSellers: CollectionProduct[] = [
     maxInstallments: 12,
     inStock: true,
     rank: 1,
+    slug: "camiseta-clube-bolsonaro",
     to: "/",
   },
 ];

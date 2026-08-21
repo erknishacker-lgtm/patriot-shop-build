@@ -1,9 +1,14 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { product as defaultProduct, type Product } from "@/data/product";
 
 export function useProduct(source: Product = defaultProduct) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    setSelectedSize(null);
+    setQuantity(1);
+  }, [source.id]);
 
   const sizeExtra = useMemo(
     () => source.sizes.find((s) => s.label === selectedSize)?.extra ?? 0,

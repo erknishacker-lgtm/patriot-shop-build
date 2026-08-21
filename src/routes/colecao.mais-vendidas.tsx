@@ -5,8 +5,9 @@ import { Breadcrumbs } from "@/components/store/Breadcrumbs";
 import { StoreLayout } from "@/components/store/StoreLayout";
 import { TrustBlock } from "@/components/store/TrustBlock";
 import { BenefitsStrip } from "@/components/store/BenefitsStrip";
-import { bestSellers, type CollectionProduct } from "@/data/collections";
+import { type CollectionProduct } from "@/data/collections";
 import { formatBRL } from "@/lib/format";
+import { fetchPublishedProducts, toCollectionProduct } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
 const TITLE = "Mais Vendidas | Clube Bolsonaro";
@@ -14,6 +15,10 @@ const DESCRIPTION =
   "Coleção Mais Vendidas do Clube Bolsonaro: camisetas patrióticas em tecido Dry 3D, com descontos, parcelamento em até 12x e envio para todo o Brasil.";
 
 export const Route = createFileRoute("/colecao/mais-vendidas")({
+  loader: async () => {
+    const products = await fetchPublishedProducts();
+    return { items: products.map(toCollectionProduct) };
+  },
   head: () => ({
     meta: [
       { title: TITLE },
@@ -135,6 +140,13 @@ function ProductCard({ item }: { item: CollectionProduct }) {
     </article>
   );
 
+  if (item.slug) {
+    return (
+      <Link to="/produto/$slug" params={{ slug: item.slug }} className="block h-full">
+        {card}
+      </Link>
+    );
+  }
   return item.to ? (
     <Link to={item.to} className="block h-full">
       {card}
@@ -145,12 +157,13 @@ function ProductCard({ item }: { item: CollectionProduct }) {
 }
 
 function CollectionPage() {
+  const { items: catalog } = Route.useLoaderData();
   const [sort, setSort] = useState<SortKey>("mais-vendidos");
   const [onlyInStock, setOnlyInStock] = useState(false);
   const [ranges, setRanges] = useState<string[]>([]);
 
   const items = useMemo(() => {
-    let list = bestSellers.filter((p) => (onlyInStock ? p.inStock : true));
+    let list = catalog.filter((p) => (onlyInStock ? p.inStock : true));
     if (ranges.length) {
       list = list.filter((p) =>
         ranges.some((id) => PRICE_RANGES.find((r) => r.id === id)?.test(p.price)),
@@ -162,7 +175,7 @@ function CollectionPage() {
     else if (sort === "maior-desconto") sorted.sort((a, b) => discountOf(b) - discountOf(a));
     else sorted.sort((a, b) => a.rank - b.rank);
     return sorted;
-  }, [onlyInStock, ranges, sort]);
+  }, [catalog, onlyInStock, ranges, sort]);
 
   return (
     <StoreLayout>

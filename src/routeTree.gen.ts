@@ -11,7 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as A8f3c91e7b2d4f06IndexRouteImport } from './routes/a8f3c91e7b2d4f06/index'
+import { Route as A8f3c91e7b2d4f06EstoqueRouteImport } from './routes/a8f3c91e7b2d4f06/estoque'
 import { Route as ColecaoMaisVendidasRouteImport } from './routes/colecao.mais-vendidas'
+import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
+import { Route as A8f3c91e7b2d4f06EstoqueIndexRouteImport } from './routes/a8f3c91e7b2d4f06/estoque/index'
+import { Route as A8f3c91e7b2d4f06EstoqueIdRouteImport } from './routes/a8f3c91e7b2d4f06/estoque/$id'
+import { Route as A8f3c91e7b2d4f06EstoqueNovoRouteImport } from './routes/a8f3c91e7b2d4f06/estoque/novo'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,40 +29,120 @@ const CheckoutRoute = CheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const A8f3c91e7b2d4f06IndexRoute = A8f3c91e7b2d4f06IndexRouteImport.update({
+  id: '/a8f3c91e7b2d4f06/',
+  path: '/a8f3c91e7b2d4f06/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const A8f3c91e7b2d4f06EstoqueRoute = A8f3c91e7b2d4f06EstoqueRouteImport.update({
+  id: '/a8f3c91e7b2d4f06/estoque',
+  path: '/a8f3c91e7b2d4f06/estoque',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ColecaoMaisVendidasRoute = ColecaoMaisVendidasRouteImport.update({
   id: '/colecao/mais-vendidas',
   path: '/colecao/mais-vendidas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProdutoSlugRoute = ProdutoSlugRouteImport.update({
+  id: '/produto/$slug',
+  path: '/produto/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const A8f3c91e7b2d4f06EstoqueIndexRoute =
+  A8f3c91e7b2d4f06EstoqueIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => A8f3c91e7b2d4f06EstoqueRoute,
+  } as any)
+const A8f3c91e7b2d4f06EstoqueIdRoute =
+  A8f3c91e7b2d4f06EstoqueIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => A8f3c91e7b2d4f06EstoqueRoute,
+  } as any)
+const A8f3c91e7b2d4f06EstoqueNovoRoute =
+  A8f3c91e7b2d4f06EstoqueNovoRouteImport.update({
+    id: '/novo',
+    path: '/novo',
+    getParentRoute: () => A8f3c91e7b2d4f06EstoqueRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/a8f3c91e7b2d4f06/estoque': typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/a8f3c91e7b2d4f06/': typeof A8f3c91e7b2d4f06IndexRoute
+  '/a8f3c91e7b2d4f06/estoque/$id': typeof A8f3c91e7b2d4f06EstoqueIdRoute
+  '/a8f3c91e7b2d4f06/estoque/novo': typeof A8f3c91e7b2d4f06EstoqueNovoRoute
+  '/a8f3c91e7b2d4f06/estoque/': typeof A8f3c91e7b2d4f06EstoqueIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/a8f3c91e7b2d4f06': typeof A8f3c91e7b2d4f06IndexRoute
+  '/a8f3c91e7b2d4f06/estoque/$id': typeof A8f3c91e7b2d4f06EstoqueIdRoute
+  '/a8f3c91e7b2d4f06/estoque/novo': typeof A8f3c91e7b2d4f06EstoqueNovoRoute
+  '/a8f3c91e7b2d4f06/estoque': typeof A8f3c91e7b2d4f06EstoqueIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/a8f3c91e7b2d4f06/estoque': typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/a8f3c91e7b2d4f06/': typeof A8f3c91e7b2d4f06IndexRoute
+  '/a8f3c91e7b2d4f06/estoque/$id': typeof A8f3c91e7b2d4f06EstoqueIdRoute
+  '/a8f3c91e7b2d4f06/estoque/novo': typeof A8f3c91e7b2d4f06EstoqueNovoRoute
+  '/a8f3c91e7b2d4f06/estoque/': typeof A8f3c91e7b2d4f06EstoqueIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/checkout' | '/colecao/mais-vendidas'
+  fullPaths:
+    | '/'
+    | '/checkout'
+    | '/a8f3c91e7b2d4f06/estoque'
+    | '/colecao/mais-vendidas'
+    | '/produto/$slug'
+    | '/a8f3c91e7b2d4f06/'
+    | '/a8f3c91e7b2d4f06/estoque/$id'
+    | '/a8f3c91e7b2d4f06/estoque/novo'
+    | '/a8f3c91e7b2d4f06/estoque/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/checkout' | '/colecao/mais-vendidas'
-  id: '__root__' | '/' | '/checkout' | '/colecao/mais-vendidas'
+  to:
+    | '/'
+    | '/checkout'
+    | '/colecao/mais-vendidas'
+    | '/produto/$slug'
+    | '/a8f3c91e7b2d4f06'
+    | '/a8f3c91e7b2d4f06/estoque/$id'
+    | '/a8f3c91e7b2d4f06/estoque/novo'
+    | '/a8f3c91e7b2d4f06/estoque'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkout'
+    | '/a8f3c91e7b2d4f06/estoque'
+    | '/colecao/mais-vendidas'
+    | '/produto/$slug'
+    | '/a8f3c91e7b2d4f06/'
+    | '/a8f3c91e7b2d4f06/estoque/$id'
+    | '/a8f3c91e7b2d4f06/estoque/novo'
+    | '/a8f3c91e7b2d4f06/estoque/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CheckoutRoute: typeof CheckoutRoute
+  A8f3c91e7b2d4f06EstoqueRoute: typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   ColecaoMaisVendidasRoute: typeof ColecaoMaisVendidasRoute
+  ProdutoSlugRoute: typeof ProdutoSlugRoute
+  A8f3c91e7b2d4f06IndexRoute: typeof A8f3c91e7b2d4f06IndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,6 +161,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/a8f3c91e7b2d4f06/': {
+      id: '/a8f3c91e7b2d4f06/'
+      path: '/a8f3c91e7b2d4f06'
+      fullPath: '/a8f3c91e7b2d4f06/'
+      preLoaderRoute: typeof A8f3c91e7b2d4f06IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/a8f3c91e7b2d4f06/estoque': {
+      id: '/a8f3c91e7b2d4f06/estoque'
+      path: '/a8f3c91e7b2d4f06/estoque'
+      fullPath: '/a8f3c91e7b2d4f06/estoque'
+      preLoaderRoute: typeof A8f3c91e7b2d4f06EstoqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/colecao/mais-vendidas': {
       id: '/colecao/mais-vendidas'
       path: '/colecao/mais-vendidas'
@@ -82,13 +182,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ColecaoMaisVendidasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/produto/$slug': {
+      id: '/produto/$slug'
+      path: '/produto/$slug'
+      fullPath: '/produto/$slug'
+      preLoaderRoute: typeof ProdutoSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/a8f3c91e7b2d4f06/estoque/': {
+      id: '/a8f3c91e7b2d4f06/estoque/'
+      path: '/'
+      fullPath: '/a8f3c91e7b2d4f06/estoque/'
+      preLoaderRoute: typeof A8f3c91e7b2d4f06EstoqueIndexRouteImport
+      parentRoute: typeof A8f3c91e7b2d4f06EstoqueRoute
+    }
+    '/a8f3c91e7b2d4f06/estoque/$id': {
+      id: '/a8f3c91e7b2d4f06/estoque/$id'
+      path: '/$id'
+      fullPath: '/a8f3c91e7b2d4f06/estoque/$id'
+      preLoaderRoute: typeof A8f3c91e7b2d4f06EstoqueIdRouteImport
+      parentRoute: typeof A8f3c91e7b2d4f06EstoqueRoute
+    }
+    '/a8f3c91e7b2d4f06/estoque/novo': {
+      id: '/a8f3c91e7b2d4f06/estoque/novo'
+      path: '/novo'
+      fullPath: '/a8f3c91e7b2d4f06/estoque/novo'
+      preLoaderRoute: typeof A8f3c91e7b2d4f06EstoqueNovoRouteImport
+      parentRoute: typeof A8f3c91e7b2d4f06EstoqueRoute
+    }
   }
 }
+
+interface A8f3c91e7b2d4f06EstoqueRouteChildren {
+  A8f3c91e7b2d4f06EstoqueIdRoute: typeof A8f3c91e7b2d4f06EstoqueIdRoute
+  A8f3c91e7b2d4f06EstoqueNovoRoute: typeof A8f3c91e7b2d4f06EstoqueNovoRoute
+  A8f3c91e7b2d4f06EstoqueIndexRoute: typeof A8f3c91e7b2d4f06EstoqueIndexRoute
+}
+
+const A8f3c91e7b2d4f06EstoqueRouteChildren: A8f3c91e7b2d4f06EstoqueRouteChildren =
+  {
+    A8f3c91e7b2d4f06EstoqueIdRoute: A8f3c91e7b2d4f06EstoqueIdRoute,
+    A8f3c91e7b2d4f06EstoqueNovoRoute: A8f3c91e7b2d4f06EstoqueNovoRoute,
+    A8f3c91e7b2d4f06EstoqueIndexRoute: A8f3c91e7b2d4f06EstoqueIndexRoute,
+  }
+
+const A8f3c91e7b2d4f06EstoqueRouteWithChildren =
+  A8f3c91e7b2d4f06EstoqueRoute._addFileChildren(
+    A8f3c91e7b2d4f06EstoqueRouteChildren,
+  )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CheckoutRoute: CheckoutRoute,
+  A8f3c91e7b2d4f06EstoqueRoute: A8f3c91e7b2d4f06EstoqueRouteWithChildren,
   ColecaoMaisVendidasRoute: ColecaoMaisVendidasRoute,
+  ProdutoSlugRoute: ProdutoSlugRoute,
+  A8f3c91e7b2d4f06IndexRoute: A8f3c91e7b2d4f06IndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
