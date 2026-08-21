@@ -13,14 +13,17 @@ import { cn } from "@/lib/utils";
 
 type PendingImage = { id: string; file: File; preview: string; alt: string };
 
-async function fileToBase64(file: File) {
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  let binary = "";
-  const chunk = 0x8000;
-  for (let i = 0; i < bytes.length; i += chunk) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
-  }
-  return btoa(binary);
+function fileToBase64(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result ?? "");
+      const comma = result.indexOf(",");
+      resolve(comma >= 0 ? result.slice(comma + 1) : result);
+    };
+    reader.onerror = () => reject(reader.error ?? new Error("Não leu a foto."));
+    reader.readAsDataURL(file);
+  });
 }
 
 function Field({
@@ -91,7 +94,12 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
     if (!files?.length) return;
     const next: PendingImage[] = [];
     for (const file of Array.from(files)) {
-      if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type)) continue;
+      const mime = file.type || "";
+      const name = file.name.toLowerCase();
+      const okType =
+        mime.startsWith("image/") ||
+        /\.(jpe?g|png|webp|gif|jfif)$/.test(name);
+      if (!okType) continue;
       if (file.size > 6 * 1024 * 1024) {
         toast.error(`${file.name} passa de 6 MB.`);
         continue;
@@ -211,17 +219,6 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
           </Field>
           <Field label="SKU">
             <Input value={draft.sku} onChange={(e) => patch({ sku: e.target.value })} />
-          </Field>
-          <Field label="Link do botão de compra" className="sm:col-span-2">
-            <Input
-              type="url"
-              placeholder="https://… link de checkout deste produto"
-              value={draft.checkoutUrl}
-              onChange={(e) => patch({ checkoutUrl: e.target.value })}
-            />
-            <span className="text-xs font-normal normal-case tracking-normal text-muted-foreground">
-              Cada produto tem o próprio checkout. Cole aqui o link da Yampi (ou outro) desta peça.
-            </span>
           </Field>
           <Field label="Endereço na loja (slug)">
             <Input
@@ -403,6 +400,7 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
               <tr className="text-left text-xs uppercase tracking-wide text-muted-foreground">
                 <th className="pb-2 font-semibold">Unidade</th>
                 <th className="pb-2 font-semibold">Acréscimo (R$)</th>
+                <th className="pb-2 font-semibold">Link do checkout</th>
                 <th className="pb-2 font-semibold">Disponível</th>
                 <th className="pb-2" />
               </tr>
@@ -428,6 +426,18 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
                       onChange={(e) => {
                         const sizes = [...draft.sizes];
                         sizes[index] = { ...size, extra: Number(e.target.value) || 0 };
+                        patch({ sizes });
+                      }}
+                    />
+                  </td>
+                  <td className="py-2 pr-2 min-w-[220px]">
+                    <Input
+                      type="url"
+                      placeholder="https://… checkout deste tamanho"
+                      value={size.checkoutUrl}
+                      onChange={(e) => {
+                        const sizes = [...draft.sizes];
+                        sizes[index] = { ...size, checkoutUrl: e.target.value };
                         patch({ sizes });
                       }}
                     />
@@ -461,7 +471,9 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
         <Button
           type="button"
           variant="outline"
-          onClick={() => patch({ sizes: [...draft.sizes, { label: "", extra: 0, available: true }] })}
+          onClick={() =>
+            patch({ sizes: [...draft.sizes, { label: "", extra: 0, available: true, checkoutUrl: "" }] })
+          }
         >
           <Plus className="size-4" />
           Nova unidade

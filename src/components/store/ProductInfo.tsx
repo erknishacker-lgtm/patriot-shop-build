@@ -47,7 +47,10 @@ export function ProductInfo(props: Props) {
     return () => clearTimeout(timer);
   }, [added]);
 
-  const checkoutUrl = product.checkoutUrl?.trim() ?? "";
+  const sizeCheckout =
+    product.sizes.find((size) => size.label === selectedSize)?.checkoutUrl?.trim() ?? "";
+  const checkoutUrl = sizeCheckout || product.checkoutUrl?.trim() || "";
+  const hasSizeCheckouts = product.sizes.some((size) => size.checkoutUrl?.trim());
 
   const handleAddToCart = () => {
     if (!selectedSize) {
@@ -58,6 +61,10 @@ export function ProductInfo(props: Props) {
     }
     if (checkoutUrl) {
       window.location.href = applyCheckoutParams(checkoutUrl, selectedSize, quantity);
+      return;
+    }
+    if (hasSizeCheckouts) {
+      toast.error("Este tamanho ainda não tem link de compra.");
       return;
     }
     addItem({
@@ -143,7 +150,11 @@ export function ProductInfo(props: Props) {
         onClick={handleAddToCart}
       >
         {added ? <Check className="animate-in zoom-in" /> : <ShoppingCart />}
-        {added ? "ADICIONADO" : checkoutUrl ? "COMPRAR AGORA" : "ADICIONAR AO CARRINHO"}
+        {added
+          ? "ADICIONADO"
+          : hasSizeCheckouts || checkoutUrl
+            ? "COMPRAR AGORA"
+            : "ADICIONAR AO CARRINHO"}
 
 
       </Button>

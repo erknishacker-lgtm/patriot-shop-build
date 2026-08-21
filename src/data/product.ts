@@ -10,6 +10,8 @@ export type ProductSize = {
   extra: number;
   /** Disponibilidade da grade */
   available: boolean;
+  /** Link de checkout deste tamanho */
+  checkoutUrl: string;
 };
 
 export type ProductSpec = {
@@ -83,12 +85,12 @@ export const product: Product = {
     { src: img4.url, alt: "Camiseta amarela #Mitinho em flat lay pelas costas" },
   ],
   sizes: [
-    { label: "P", extra: 0, available: true },
-    { label: "M", extra: 0, available: true },
-    { label: "G", extra: 0, available: true },
-    { label: "GG", extra: 0, available: true },
-    { label: "G1", extra: 9.15, available: true },
-    { label: "G2", extra: 19.15, available: true },
+    { label: "P", extra: 0, available: true, checkoutUrl: "" },
+    { label: "M", extra: 0, available: true, checkoutUrl: "" },
+    { label: "G", extra: 0, available: true, checkoutUrl: "" },
+    { label: "GG", extra: 0, available: true, checkoutUrl: "" },
+    { label: "G1", extra: 9.15, available: true, checkoutUrl: "" },
+    { label: "G2", extra: 19.15, available: true, checkoutUrl: "" },
   ],
   description: [
     "A Camiseta Oficial Clube Bolsonaro foi criada para quem deseja vestir mais do que uma roupa: deseja expressar uma mensagem. Com visual marcante, acabamento de qualidade e identidade patriótica, é uma peça que carrega força, presença e personalidade.",

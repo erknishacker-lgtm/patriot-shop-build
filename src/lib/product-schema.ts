@@ -35,6 +35,7 @@ const sizeSchema = z.object({
   label: z.string().trim().min(1).max(20),
   extra: z.number().min(0).max(10_000),
   available: z.boolean(),
+  checkoutUrl: z.string().trim().max(2000).optional(),
 });
 
 const imageSchema = z.object({
@@ -130,7 +131,10 @@ export function parseProductInput(input: unknown, isNew: boolean): ParsedProduct
     pixDiscount: parsed.pixDiscount,
     maxInstallments: parsed.maxInstallments,
     images,
-    sizes: parsed.sizes,
+    sizes: parsed.sizes.map((size) => ({
+      ...size,
+      checkoutUrl: safeCheckoutUrl(size.checkoutUrl ?? ""),
+    })),
     description: parsed.description.map((p) => p.trim()).filter(Boolean),
     specifications: parsed.specifications,
     highlights: parsed.highlights,
