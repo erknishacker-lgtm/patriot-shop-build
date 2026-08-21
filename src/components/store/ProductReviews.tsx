@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Check, Star, ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -8,6 +9,7 @@ type Props = {
 };
 
 export function ProductReviews({ reviews }: Props) {
+  const [showAll, setShowAll] = useState(false);
   if (!reviews.length) return null;
 
   const average =
@@ -81,7 +83,9 @@ export function ProductReviews({ reviews }: Props) {
           </div>
 
           <div className="space-y-4">
-            {reviews.slice(0, 4).map((review) => (
+            {(showAll ? reviews : reviews.slice(0, 4)).map((review) => {
+              const photos = review.photos ?? [];
+              return (
               <article
                 key={review.id}
                 className="rounded-2xl border border-border bg-card p-5 shadow-sm"
@@ -123,20 +127,44 @@ export function ProductReviews({ reviews }: Props) {
                     ))}
                   </div>
                 </div>
-                <h3 className="mt-3 font-semibold text-foreground">{review.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                  {review.content}
-                </p>
+                {review.title ? (
+                  <h3 className="mt-3 font-semibold text-foreground">{review.title}</h3>
+                ) : null}
+                {review.content ? (
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    {review.content}
+                  </p>
+                ) : null}
+                {photos.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {photos.map((photo) => (
+                      <a
+                        key={photo.src}
+                        href={photo.src}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block overflow-hidden rounded-lg"
+                      >
+                        <img
+                          src={photo.src}
+                          alt={photo.alt || `Foto de ${review.author}`}
+                          className="h-20 w-20 object-cover"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                )}
                 <div className="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
                   <ThumbsUp className="size-3.5" aria-hidden="true" />
                   <span>Esta avaliação foi útil</span>
                 </div>
               </article>
-            ))}
+            );
+            })}
 
             {reviews.length > 4 && (
-              <Button variant="outline" className="w-full">
-                Ver todas as {reviews.length} avaliações
+              <Button variant="outline" className="w-full" onClick={() => setShowAll((v) => !v)}>
+                {showAll ? "Ver menos" : `Ver todas as ${reviews.length} avaliações`}
               </Button>
             )}
           </div>

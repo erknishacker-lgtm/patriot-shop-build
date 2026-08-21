@@ -58,8 +58,9 @@ const reviewSchema = z.object({
   rating: z.number().int().min(1).max(5),
   date: z.string().trim().max(32),
   title: z.string().trim().max(120),
-  content: z.string().trim().min(1).max(2000),
+  content: z.string().trim().max(2000),
   verified: z.boolean(),
+  photos: z.array(imageSchema).max(8).optional(),
 });
 
 export const productInputSchema = z.object({
@@ -122,7 +123,17 @@ export function parseProductInput(input: unknown, isNew: boolean): ParsedProduct
     highlights: parsed.highlights,
     faq: parsed.faq,
     sizeChart: parsed.sizeChart,
-    reviews: parsed.reviews,
+    reviews: parsed.reviews
+      .map((review) => ({
+        ...review,
+        photos: (review.photos ?? [])
+          .map((photo) => {
+            const src = safeImageSrc(photo.src);
+            return src ? { src, alt: photo.alt.trim() } : null;
+          })
+          .filter((photo): photo is { src: string; alt: string } => Boolean(photo)),
+      }))
+      .filter((review) => review.author.trim() && (review.content.trim() || review.photos.length > 0)),
     rank: parsed.rank,
     published: parsed.published,
   };

@@ -25,6 +25,12 @@ export function Footer() {
           ))}
         </ul>
 
+        <img
+          src="/brand/stampabr-wordmark.png"
+          alt="Stampabr — camisetas personalizadas"
+          className="h-10 w-auto object-contain opacity-95 sm:h-12"
+        />
+
         <p className="text-[11px] text-primary-foreground/55">© 2026 Clube Bolsonaro</p>
       </div>
     </footer>

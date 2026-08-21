@@ -25,6 +25,7 @@ export type ProductReview = {
   title: string;
   content: string;
   verified: boolean;
+  photos: { src: string; alt: string }[];
 };
 
 export type Product = {
@@ -172,6 +173,7 @@ export const product: Product = {
       content:
         "A camiseta superou minhas expectativas. Tecido leve, costura reforçada e o escudo em alto relevo dá um acabamento premium.",
       verified: true,
+      photos: [],
     },
     {
       id: "r2",
@@ -182,6 +184,7 @@ export const product: Product = {
       content:
         "Chegou antes do prazo, com Nota Fiscal e embalagem protegida. O tamanho G1 serviu direitinho conforme a tabela.",
       verified: true,
+      photos: [],
     },
     {
       id: "r3",
@@ -192,6 +195,7 @@ export const product: Product = {
       content:
         "Gostei bastante da estampa e do tecido. Só achei que a gola podia ser um pouco mais reforçada, mas no geral recomendo.",
       verified: true,
+      photos: [],
     },
     {
       id: "r4",
@@ -202,6 +206,7 @@ export const product: Product = {
       content:
         "Comprei para presentear e a pessoa adorou. Identidade visual forte e cores vibrantes. Vou comprar mais.",
       verified: false,
+      photos: [],
     },
     {
       id: "r5",
@@ -212,6 +217,7 @@ export const product: Product = {
       content:
         "Já é a terceira que compro. Caimento ótimo, não desbota na lavagem e o atendimento é nota 10.",
       verified: true,
+      photos: [],
     },
   ],
 };

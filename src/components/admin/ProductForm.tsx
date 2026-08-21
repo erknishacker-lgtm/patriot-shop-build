@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Plus, Trash2, Upload } from "lucide-react";
+import { Plus, Star, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -59,10 +59,14 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
   const [draft, setDraft] = useState<ProductRecord>(initial);
   const [slugLocked, setSlugLocked] = useState(!isNew);
   const [pending, setPending] = useState<PendingImage[]>([]);
+  const [pendingReviewPhotos, setPendingReviewPhotos] = useState<Record<string, PendingImage[]>>({});
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    return () => pending.forEach((item) => URL.revokeObjectURL(item.preview));
+    return () => {
+      pending.forEach((item) => URL.revokeObjectURL(item.preview));
+      Object.values(pendingReviewPhotos).flat().forEach((item) => URL.revokeObjectURL(item.preview));
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -139,7 +143,10 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
         highlights: draft.highlights.filter((h) => h.title.trim() && h.text.trim()),
         faq: draft.faq.filter((f) => f.question.trim() && f.answer.trim()),
         sizeChart: draft.sizeChart.filter((r) => r.size.trim()),
-        reviews: draft.reviews.filter((r) => r.author.trim() && r.content.trim()),
+        reviews: draft.reviews.filter(
+          (review) =>
+            review.author.trim() && (review.content.trim() || review.photos.length > 0),
+        ),
         images: draft.images.filter((img) => img.src.trim()),
       };
 
@@ -151,10 +158,30 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
         });
         uploaded.push({ src, alt: item.alt.trim() || cleaned.name });
       }
-      if (uploaded.length) {
+
+      const reviewsWithPhotos = [];
+      for (const review of cleaned.reviews) {
+        const extras = pendingReviewPhotos[review.id] ?? [];
+        const photos = [...review.photos];
+        for (const item of extras) {
+          const src = await adminUploadImage({
+            data: { productId: id, base64: await fileToBase64(item.file) },
+          });
+          photos.push({ src, alt: item.alt.trim() || review.author });
+        }
+        reviewsWithPhotos.push({ ...review, photos });
+      }
+
+      const hadReviewUploads = Object.values(pendingReviewPhotos).some((list) => list.length > 0);
+      if (uploaded.length || hadReviewUploads) {
         await adminSaveProduct({
           data: {
-            product: { ...cleaned, id, images: [...cleaned.images, ...uploaded] },
+            product: {
+              ...cleaned,
+              id,
+              images: [...cleaned.images, ...uploaded],
+              reviews: reviewsWithPhotos,
+            },
             isNew: false,
           },
         });
@@ -162,7 +189,11 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
 
       toast.success(isNew ? "Produto cadastrado." : "Produto atualizado.");
       pending.forEach((item) => URL.revokeObjectURL(item.preview));
+      Object.values(pendingReviewPhotos)
+        .flat()
+        .forEach((item) => URL.revokeObjectURL(item.preview));
       setPending([]);
+      setPendingReviewPhotos({});
       await navigate({ to: "/a8f3c91e7b2d4f06/estoque" });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Não foi possível salvar.");
@@ -641,6 +672,199 @@ export function ProductForm({ initial, isNew }: { initial: ProductRecord; isNew:
         >
           <Plus className="size-4" />
           Pergunta
+        </Button>
+      </Section>
+
+      <Section
+        title="Avaliações dos clientes"
+        hint="Cadastre aqui os comentários e fotos que os clientes mandam no WhatsApp ou Instagram."
+      >
+        {draft.reviews.map((review, index) => {
+          const extras = pendingReviewPhotos[review.id] ?? [];
+          return (
+            <div key={review.id} className="grid gap-3 rounded-xl border border-border p-3">
+              <div className="flex flex-wrap items-start gap-2">
+                <Input
+                  className="min-w-[160px] flex-1"
+                  value={review.author}
+                  placeholder="Nome do cliente"
+                  onChange={(e) => {
+                    const reviews = [...draft.reviews];
+                    reviews[index] = { ...review, author: e.target.value };
+                    patch({ reviews });
+                  }}
+                />
+                <Input
+                  type="date"
+                  className="w-[150px]"
+                  value={review.date}
+                  onChange={(e) => {
+                    const reviews = [...draft.reviews];
+                    reviews[index] = { ...review, date: e.target.value };
+                    patch({ reviews });
+                  }}
+                />
+                <div className="flex items-center gap-1 pt-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      aria-label={`${star} estrela${star > 1 ? "s" : ""}`}
+                      onClick={() => {
+                        const reviews = [...draft.reviews];
+                        reviews[index] = { ...review, rating: star };
+                        patch({ reviews });
+                      }}
+                    >
+                      <Star
+                        className={cn(
+                          "size-4",
+                          star <= review.rating ? "fill-gold text-gold" : "text-muted-foreground/40",
+                        )}
+                      />
+                    </button>
+                  ))}
+                </div>
+                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                  Compra verificada
+                  <Switch
+                    checked={review.verified}
+                    onCheckedChange={(verified) => {
+                      const reviews = [...draft.reviews];
+                      reviews[index] = { ...review, verified };
+                      patch({ reviews });
+                    }}
+                  />
+                </label>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    extras.forEach((item) => URL.revokeObjectURL(item.preview));
+                    setPendingReviewPhotos((prev) => {
+                      const next = { ...prev };
+                      delete next[review.id];
+                      return next;
+                    });
+                    patch({ reviews: draft.reviews.filter((_, i) => i !== index) });
+                  }}
+                >
+                  <Trash2 className="size-4" />
+                </Button>
+              </div>
+              <Input
+                value={review.title}
+                placeholder="Título (opcional)"
+                onChange={(e) => {
+                  const reviews = [...draft.reviews];
+                  reviews[index] = { ...review, title: e.target.value };
+                  patch({ reviews });
+                }}
+              />
+              <Textarea
+                value={review.content}
+                placeholder="Comentário do cliente"
+                rows={3}
+                onChange={(e) => {
+                  const reviews = [...draft.reviews];
+                  reviews[index] = { ...review, content: e.target.value };
+                  patch({ reviews });
+                }}
+              />
+              <div className="flex flex-wrap gap-2">
+                {review.photos.map((photo, photoIndex) => (
+                  <div key={`${photo.src}-${photoIndex}`} className="relative">
+                    <img src={photo.src} alt="" className="size-16 rounded-lg object-cover bg-muted" />
+                    <button
+                      type="button"
+                      className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-background text-xs shadow"
+                      onClick={() => {
+                        const reviews = [...draft.reviews];
+                        reviews[index] = {
+                          ...review,
+                          photos: review.photos.filter((_, i) => i !== photoIndex),
+                        };
+                        patch({ reviews });
+                      }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+                {extras.map((item) => (
+                  <div key={item.id} className="relative">
+                    <img src={item.preview} alt="" className="size-16 rounded-lg object-cover bg-muted" />
+                    <button
+                      type="button"
+                      className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-background text-xs shadow"
+                      onClick={() => {
+                        URL.revokeObjectURL(item.preview);
+                        setPendingReviewPhotos((prev) => ({
+                          ...prev,
+                          [review.id]: (prev[review.id] ?? []).filter((p) => p.id !== item.id),
+                        }));
+                      }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+                <label className="grid size-16 cursor-pointer place-items-center rounded-lg border border-dashed border-border text-muted-foreground hover:bg-muted/40">
+                  <Upload className="size-4" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="sr-only"
+                    onChange={(e) => {
+                      const files = Array.from(e.target.files ?? []).filter((file) =>
+                        ["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type),
+                      );
+                      if (!files.length) return;
+                      setPendingReviewPhotos((prev) => ({
+                        ...prev,
+                        [review.id]: [
+                          ...(prev[review.id] ?? []),
+                          ...files.map((file) => ({
+                            id: crypto.randomUUID(),
+                            file,
+                            preview: URL.createObjectURL(file),
+                            alt: review.author || file.name,
+                          })),
+                        ],
+                      }));
+                      e.currentTarget.value = "";
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+          );
+        })}
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() =>
+            patch({
+              reviews: [
+                ...draft.reviews,
+                {
+                  id: crypto.randomUUID(),
+                  author: "",
+                  rating: 5,
+                  date: new Date().toISOString().slice(0, 10),
+                  title: "",
+                  content: "",
+                  verified: true,
+                  photos: [],
+                },
+              ],
+            })
+          }
+        >
+          <Plus className="size-4" />
+          Nova avaliação
         </Button>
       </Section>
 

@@ -66,7 +66,10 @@ export function rowToProduct(row: ProductRow): ProductRecord {
     highlights: Array.isArray(row.highlights) ? row.highlights : [],
     faq: Array.isArray(row.faq) ? row.faq : [],
     sizeChart: Array.isArray(row.size_chart) ? row.size_chart : [],
-    reviews: Array.isArray(row.reviews) ? row.reviews : [],
+    reviews: (Array.isArray(row.reviews) ? row.reviews : []).map((review) => ({
+      ...review,
+      photos: Array.isArray(review.photos) ? review.photos : [],
+    })),
     rank: num(row.rank, 100),
     published: row.published !== false,
   };
