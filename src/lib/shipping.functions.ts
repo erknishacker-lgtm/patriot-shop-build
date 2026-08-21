@@ -100,7 +100,15 @@ export const quoteShipping = createServerFn({ method: "POST" })
         })
         .sort((a, b) => a.price - b.price);
 
-      if (options.length === 0) return fallback();
+      if (options.length === 0) {
+        const apiError = json.find((s) => s.error)?.error;
+        console.error("[superfrete] sem opções", apiError ?? raw.slice(0, 300));
+        return {
+          options: [] as ShippingQuote[],
+          error: apiError ?? "Não encontramos opções de entrega para este CEP.",
+          source: "superfrete" as const,
+        };
+      }
       return { options, source: "superfrete" as const };
     } catch (err) {
       console.error("[superfrete] erro", err);
