@@ -8,6 +8,9 @@ export function securityHeaders(requestUrl: string): Record<string, string> {
     "https://*.supabase.co",
     "https://fonts.googleapis.com",
     "https://fonts.gstatic.com",
+    "https://connect.facebook.net",
+    "https://www.facebook.com",
+    "https://*.facebook.com",
   ];
   if (!https) {
     connect.push("ws:", "wss:", "http://localhost:*", "ws://localhost:*");
@@ -15,7 +18,7 @@ export function securityHeaders(requestUrl: string): Record<string, string> {
 
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline'",
+    "script-src 'self' 'unsafe-inline' https://connect.facebook.net",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: blob: https:",
