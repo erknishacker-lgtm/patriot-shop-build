@@ -68,9 +68,22 @@ export const quoteShipping = createServerFn({ method: "POST" })
         }),
       });
 
-      if (!res.ok) return fallback();
-      const json = (await res.json()) as SuperFreteService[] | { message?: string };
-      if (!Array.isArray(json)) return fallback();
+      const raw = await res.text();
+      if (!res.ok) {
+        console.error("[superfrete] HTTP", res.status, raw.slice(0, 500));
+        return fallback();
+      }
+      let json: SuperFreteService[] | { message?: string };
+      try {
+        json = JSON.parse(raw);
+      } catch {
+        console.error("[superfrete] resposta não-JSON", raw.slice(0, 300));
+        return fallback();
+      }
+      if (!Array.isArray(json)) {
+        console.error("[superfrete] payload inesperado", raw.slice(0, 500));
+        return fallback();
+      }
 
       const options = json
         .filter((s) => !s.error && (s.price ?? s.custom_price) != null)
@@ -89,7 +102,8 @@ export const quoteShipping = createServerFn({ method: "POST" })
 
       if (options.length === 0) return fallback();
       return { options, source: "superfrete" as const };
-    } catch {
+    } catch (err) {
+      console.error("[superfrete] erro", err);
       return fallback();
     }
   });
