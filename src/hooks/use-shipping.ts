@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { onlyDigits } from "@/lib/format";
+import { quoteShipping } from "@/lib/shipping.functions";
 
 export type ShippingOption = {
   id: string;
@@ -7,29 +8,6 @@ export type ShippingOption = {
   eta: string;
   price: number;
 };
-
-/**
- * Cálculo de frete em modo demonstração.
- * Substitua `mockQuote` por uma chamada real (Correios, Melhor Envio, etc.).
- */
-async function mockQuote(cep: string): Promise<ShippingOption[]> {
-  await new Promise((resolve) => setTimeout(resolve, 900));
-  const far = Number(cep.slice(0, 1)) >= 6 ? 2 : 0;
-  return [
-    {
-      id: "padrao",
-      name: "Entrega padrão",
-      eta: `${8 + far} a ${13 + far} dias úteis`,
-      price: 0,
-    },
-    {
-      id: "expressa",
-      name: "Entrega expressa",
-      eta: `${5 + far} a ${9 + far} dias úteis`,
-      price: 19.9,
-    },
-  ];
-}
 
 export function useShipping() {
   const [loading, setLoading] = useState(false);
@@ -46,7 +24,13 @@ export function useShipping() {
     setError(null);
     setLoading(true);
     try {
-      setOptions(await mockQuote(cep));
+      const result = await quoteShipping({ data: { cep } });
+      if (!result.options || result.options.length === 0) {
+        setError("Não encontramos opções de entrega para este CEP.");
+        setOptions(null);
+      } else {
+        setOptions(result.options);
+      }
     } catch {
       setError("Não foi possível calcular o frete agora. Tente novamente.");
     } finally {
