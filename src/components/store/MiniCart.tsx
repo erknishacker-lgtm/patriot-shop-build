@@ -1,45 +1,16 @@
-import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Loader2, ShoppingBag, Trash2 } from "lucide-react";
-import { toast } from "sonner";
-import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { useCart } from "@/hooks/use-cart";
+import { useCartCheckout } from "@/hooks/use-cart-checkout";
 import { formatBRL } from "@/lib/format";
-import { applyCheckoutParams, buildYampiCheckoutUrl } from "@/lib/yampi";
-import { createYampiCheckout } from "@/lib/yampi.functions";
 import { QuantitySelector } from "./QuantitySelector";
 
 export function MiniCart() {
   const { items, isOpen, closeCart, removeItem, updateQuantity, subtotal, count } = useCart();
-  const [loading, setLoading] = useState(false);
-  const goToYampiCheckout = useServerFn(createYampiCheckout);
-
-  const handleCheckout = async () => {
-    if (items.length === 0) return;
-    const withLink = items.find((item) => item.checkoutUrl?.trim());
-    if (withLink?.checkoutUrl) {
-      window.location.href = applyCheckoutParams(
-        withLink.checkoutUrl,
-        withLink.size,
-        withLink.quantity,
-      );
-      return;
-    }
-    const payload = items.map((i) => ({ size: i.size, quantity: i.quantity }));
-    setLoading(true);
-    try {
-      const result = await goToYampiCheckout({ data: { items: payload } });
-      window.location.href = result.url;
-    } catch {
-      toast.error("Não foi possível abrir o checkout. Redirecionando...");
-      window.location.href = buildYampiCheckoutUrl(payload);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  const { checkout, loading } = useCartCheckout();
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
@@ -113,14 +84,19 @@ export function MiniCart() {
               </p>
               <Separator className="my-4" />
               <div className="flex flex-col gap-2">
+                <Button asChild variant="brand" size="lg">
+                  <Link to="/carrinho" onClick={closeCart}>
+                    Ver carrinho
+                  </Link>
+                </Button>
                 <Button
-                  variant="brand"
+                  variant="cta"
                   size="lg"
                   disabled={loading}
-                  onClick={() => void handleCheckout()}
+                  onClick={() => void checkout()}
                 >
                   {loading && <Loader2 className="animate-spin" />}
-                  {loading ? "Abrindo checkout..." : "Finalizar compra"}
+                  {loading ? "Abrindo pagamento…" : "Finalizar compra"}
                 </Button>
                 <Button variant="ghost" onClick={closeCart}>
                   Continuar comprando

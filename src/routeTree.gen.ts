@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as A8f3c91e7b2d4f06IndexRouteImport } from './routes/a8f3c91e7b2d4f06/index'
 import { Route as A8f3c91e7b2d4f06EstoqueRouteImport } from './routes/a8f3c91e7b2d4f06/estoque'
@@ -22,6 +23,11 @@ import { Route as A8f3c91e7b2d4f06EstoqueNovoRouteImport } from './routes/a8f3c9
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CarrinhoRoute = CarrinhoRouteImport.update({
+  id: '/carrinho',
+  path: '/carrinho',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -70,6 +76,7 @@ const A8f3c91e7b2d4f06EstoqueNovoRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
   '/a8f3c91e7b2d4f06/estoque': typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -92,6 +100,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
   '/a8f3c91e7b2d4f06/estoque': typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/carrinho'
     | '/checkout'
     | '/a8f3c91e7b2d4f06/estoque'
     | '/colecao/mais-vendidas'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/carrinho'
     | '/checkout'
     | '/colecao/mais-vendidas'
     | '/produto/$slug'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/carrinho'
     | '/checkout'
     | '/a8f3c91e7b2d4f06/estoque'
     | '/colecao/mais-vendidas'
@@ -138,6 +150,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CarrinhoRoute: typeof CarrinhoRoute
   CheckoutRoute: typeof CheckoutRoute
   A8f3c91e7b2d4f06EstoqueRoute: typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   ColecaoMaisVendidasRoute: typeof ColecaoMaisVendidasRoute
@@ -152,6 +165,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/carrinho': {
+      id: '/carrinho'
+      path: '/carrinho'
+      fullPath: '/carrinho'
+      preLoaderRoute: typeof CarrinhoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -233,6 +253,7 @@ const A8f3c91e7b2d4f06EstoqueRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CarrinhoRoute: CarrinhoRoute,
   CheckoutRoute: CheckoutRoute,
   A8f3c91e7b2d4f06EstoqueRoute: A8f3c91e7b2d4f06EstoqueRouteWithChildren,
   ColecaoMaisVendidasRoute: ColecaoMaisVendidasRoute,

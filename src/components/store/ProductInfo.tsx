@@ -50,23 +50,20 @@ export function ProductInfo(props: Props) {
   const sizeCheckout =
     product.sizes.find((size) => size.label === selectedSize)?.checkoutUrl?.trim() ?? "";
   const checkoutUrl = sizeCheckout || product.checkoutUrl?.trim() || "";
-  const hasSizeCheckouts = product.sizes.some((size) => size.checkoutUrl?.trim());
+  const hasCheckout =
+    Boolean(product.checkoutUrl?.trim()) ||
+    product.sizes.some((size) => Boolean(size.checkoutUrl?.trim()));
+
+  const requireSize = () => {
+    if (selectedSize) return true;
+    setShowSizeError(true);
+    document.getElementById("size-selector")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    toast.error("Escolha um tamanho antes de continuar.");
+    return false;
+  };
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      setShowSizeError(true);
-      document.getElementById("size-selector")?.scrollIntoView({ behavior: "smooth", block: "center" });
-      toast.error("Escolha um tamanho antes de continuar.");
-      return;
-    }
-    if (checkoutUrl) {
-      window.location.href = applyCheckoutParams(checkoutUrl, selectedSize, quantity);
-      return;
-    }
-    if (hasSizeCheckouts) {
-      toast.error("Este tamanho ainda não tem link de compra.");
-      return;
-    }
+    if (!requireSize() || !selectedSize) return;
     addItem({
       productId: product.sku,
       name: product.name,
@@ -81,6 +78,15 @@ export function ProductInfo(props: Props) {
       description: `${product.name} • Tamanho ${selectedSize} • ${quantity}x`,
     });
     openCart();
+  };
+
+  const handleBuyNow = () => {
+    if (!requireSize() || !selectedSize) return;
+    if (checkoutUrl) {
+      window.location.href = applyCheckoutParams(checkoutUrl, selectedSize, quantity);
+      return;
+    }
+    handleAddToCart();
   };
 
 
@@ -142,22 +148,29 @@ export function ProductInfo(props: Props) {
         </div>
       </div>
 
-      <Button
-        id="cta-add-cart"
-        variant="brand"
-        size="xl"
-        className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
-        onClick={handleAddToCart}
-      >
-        {added ? <Check className="animate-in zoom-in" /> : <ShoppingCart />}
-        {added
-          ? "ADICIONADO"
-          : hasSizeCheckouts || checkoutUrl
-            ? "COMPRAR AGORA"
-            : "ADICIONAR AO CARRINHO"}
-
-
-      </Button>
+      <div className="grid gap-2">
+        <Button
+          id="cta-add-cart"
+          variant="brand"
+          size="xl"
+          className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
+          onClick={handleAddToCart}
+        >
+          {added ? <Check className="animate-in zoom-in" /> : <ShoppingCart />}
+          {added ? "ADICIONADO" : "ADICIONAR AO CARRINHO"}
+        </Button>
+        {hasCheckout && (
+          <Button
+            type="button"
+            variant="cta"
+            size="xl"
+            className="w-full text-base tracking-wide"
+            onClick={handleBuyNow}
+          >
+            COMPRAR AGORA
+          </Button>
+        )}
+      </div>
 
 
 

@@ -34,12 +34,15 @@ type CartContextValue = {
   clear: () => void;
 };
 
+const LEGACY_CART_KEY = "clube-bolsonaro:cart";
+
+function currentStoreKey() {
+  if (typeof window === "undefined") return "patriot";
+  return storeFromHost(window.location.hostname, window.location.search, document.cookie);
+}
+
 function cartStorageKey() {
-  const storeKey =
-    typeof window === "undefined"
-      ? "patriot"
-      : storeFromHost(window.location.hostname, window.location.search);
-  return `stampabr:${storeKey}:cart`;
+  return `stampabr:${currentStoreKey()}:cart`;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -51,7 +54,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem(cartStorageKey());
+      const key = cartStorageKey();
+      let raw = window.localStorage.getItem(key);
+      if (!raw && currentStoreKey() === "patriot") {
+        raw = window.localStorage.getItem(LEGACY_CART_KEY);
+        if (raw) {
+          window.localStorage.setItem(key, raw);
+          window.localStorage.removeItem(LEGACY_CART_KEY);
+        }
+      }
       if (raw) setItems(JSON.parse(raw) as CartItem[]);
     } catch {
       /* ignora storage indisponível */
