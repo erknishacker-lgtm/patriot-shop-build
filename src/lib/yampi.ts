@@ -1,47 +1,59 @@
-export const YAMPI_CHECKOUT_URL = "https://camisetas2026.pay.yampi.com.br/r/D7RGNE9BBU";
-
-export const YAMPI_ALIAS = "camisetas2026";
+/**
+ * Yampi junta várias peças num único link, com o token de cada produto:
+ * https://loja.pay.yampi.com.br/r/TOKEN1:1,TOKEN2:2
+ * @see https://help.yampi.com.br/pt-BR/articles/6067074-como-gerar-um-link-de-compra-para-varios-produtos
+ */
 
 export type CheckoutItem = { size: string; quantity: number };
 
-/**
- * Mapa explícito tamanho -> SKU da Yampi.
- * Preencha com os códigos reais da loja para garantir 1:1 com a seleção.
- * Enquanto vazio, o servidor resolve o SKU pelo título na API da Yampi.
- */
-export const YAMPI_SKU_BY_SIZE: Record<string, string> = {};
+export type YampiPurchase = {
+  origin: string;
+  token: string;
+};
 
-export function applyCheckoutParams(url: string, size: string, quantity: number) {
+export function parseYampiPurchase(url: string): YampiPurchase | null {
   try {
-    const parsed = new URL(url);
-    if (quantity > 0 && !parsed.searchParams.has("quantity")) {
-      parsed.searchParams.set("quantity", String(quantity));
-    }
-    if (size && !parsed.searchParams.has("tamanho") && !parsed.searchParams.has("size")) {
-      parsed.searchParams.set("tamanho", size);
-    }
-    return parsed.toString();
+    const parsed = new URL(url.trim());
+    const match = parsed.pathname.match(/\/r\/([A-Za-z0-9]+)/i);
+    if (!match?.[1]) return null;
+    return { origin: parsed.origin, token: match[1] };
   } catch {
-    return url;
+    return null;
   }
 }
 
-/** Link de fallback (sem API), preservando tamanho e quantidade. */
-export function buildYampiCheckoutUrl(items: CheckoutItem[]) {
-  const url = new URL(YAMPI_CHECKOUT_URL);
-  const total = items.reduce((acc, i) => acc + i.quantity, 0);
-  if (total > 0) url.searchParams.set("quantity", String(total));
-  const sizes = items.filter((i) => i.size).map((i) => `${i.size}x${i.quantity}`);
-  if (sizes.length > 0) url.searchParams.set("tamanho", sizes.join(","));
-  return url.toString();
+export function buildYampiCheckoutFromItems(
+  items: Array<{ checkoutUrl?: string; quantity: number }>,
+): { url: string } | { error: string } {
+  const parsed = items.map((item) => {
+    const purchase = parseYampiPurchase(item.checkoutUrl ?? "");
+    if (!purchase) return null;
+    return { ...purchase, quantity: Math.max(1, Math.min(99, Math.trunc(item.quantity) || 1)) };
+  });
+
+  if (parsed.some((item) => !item)) {
+    return { error: "Uma das peças está sem o link de compra da Yampi. Cadastre o link no painel." };
+  }
+
+  const list = parsed as Array<YampiPurchase & { quantity: number }>;
+  if (list.length === 0) {
+    return { error: "O carrinho está vazio." };
+  }
+
+  const origin = list[0]!.origin;
+  if (list.some((item) => item.origin !== origin)) {
+    return {
+      error:
+        "As peças são de caixas Yampi diferentes. Coloque todos os produtos na mesma loja Yampi para pagar juntos.",
+    };
+  }
+
+  const tokens = list.map((item) => `${item.token}:${item.quantity}`).join(",");
+  return { url: `${origin}/r/${tokens}` };
 }
 
-/** URL de carrinho com múltiplos SKUs (usada quando há mais de um tamanho). */
-export function buildYampiCartUrl(entries: { skuId: string; quantity: number }[]) {
-  const url = new URL(`https://${YAMPI_ALIAS}.pay.yampi.com.br/cart`);
-  entries.forEach((entry) => {
-    url.searchParams.append("sku_id[]", entry.skuId);
-    url.searchParams.append("quantity[]", String(entry.quantity));
-  });
-  return url.toString();
+/** Um único produto: usa o token da Yampi e a quantidade (:2), sem query extra. */
+export function applyCheckoutParams(url: string, _size: string, quantity: number) {
+  const built = buildYampiCheckoutFromItems([{ checkoutUrl: url, quantity }]);
+  return "url" in built ? built.url : url;
 }

@@ -7,7 +7,7 @@ import { TrustBlock } from "@/components/store/TrustBlock";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/hooks/use-cart";
-import { paymentUrlForItem, useCartCheckout } from "@/hooks/use-cart-checkout";
+import { useCartCheckout } from "@/hooks/use-cart-checkout";
 import { useStore } from "@/hooks/use-store";
 import { formatBRL } from "@/lib/format";
 import { resolveStoreKey } from "@/lib/resolve-store-key";
@@ -37,7 +37,6 @@ function CartPage() {
   const store = useStore();
   const { items, count, subtotal, removeItem, updateQuantity } = useCart();
   const { checkout, loading } = useCartCheckout();
-  const mixedLinks = items.filter((item) => paymentUrlForItem(item)).length > 1;
 
   return (
     <StoreLayout>
@@ -96,15 +95,6 @@ function CartPage() {
                         <p className="mt-1 text-sm text-muted-foreground">
                           Tamanho {item.size} · {formatBRL(item.unitPrice)}
                         </p>
-                        {mixedLinks && paymentUrlForItem(item) && (
-                          <button
-                            type="button"
-                            className="mt-2 text-xs font-semibold text-brand underline-offset-2 hover:underline"
-                            onClick={() => void checkout(item)}
-                          >
-                            Pagar só esta peça
-                          </button>
-                        )}
                       </div>
                     </div>
 
@@ -153,12 +143,6 @@ function CartPage() {
                     {formatBRL(subtotal)}
                   </span>
                 </div>
-                {mixedLinks && (
-                  <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
-                    Cada peça desta cesta tem um pagamento próprio. O botão abaixo abre a primeira;
-                    as outras continuam aqui.
-                  </p>
-                )}
                 <Button
                   variant="cta"
                   size="xl"

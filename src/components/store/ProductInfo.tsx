@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 
 import { useCart } from "@/hooks/use-cart";
 import { useProduct } from "@/hooks/use-product";
-import { applyCheckoutParams } from "@/lib/yampi";
+import { buildYampiCheckoutFromItems } from "@/lib/yampi";
 import { cn } from "@/lib/utils";
 import { PriceBlock } from "./PriceBlock";
 import { ProductRating } from "./ProductRating";
@@ -83,7 +83,12 @@ export function ProductInfo(props: Props) {
   const handleBuyNow = () => {
     if (!requireSize() || !selectedSize) return;
     if (checkoutUrl) {
-      window.location.href = applyCheckoutParams(checkoutUrl, selectedSize, quantity);
+      const built = buildYampiCheckoutFromItems([{ checkoutUrl, quantity }]);
+      if ("error" in built) {
+        toast.error(built.error);
+        return;
+      }
+      window.location.href = built.url;
       return;
     }
     handleAddToCart();
