@@ -1,17 +1,24 @@
 import { useEffect } from "react";
 import { useRouter } from "@tanstack/react-router";
+import { COOKIE_CONSENT_EVENT, readCookieConsent } from "@/lib/cookies";
 
 const PIXEL_ID = "1691017478623685";
 
 declare global {
   interface Window {
-    fbq?: ((...args: unknown[]) => void) & { callMethod?: (...args: unknown[]) => void; queue?: unknown[]; loaded?: boolean; version?: string };
+    fbq?: ((...args: unknown[]) => void) & {
+      callMethod?: (...args: unknown[]) => void;
+      queue?: unknown[];
+      loaded?: boolean;
+      version?: string;
+    };
     _fbq?: Window["fbq"];
   }
 }
 
 function ensurePixel() {
   if (typeof window === "undefined") return;
+  if (readCookieConsent() !== "all") return;
   if (window.fbq) return;
 
   const fbq = function (...args: unknown[]) {
@@ -41,6 +48,9 @@ export function MetaPixel() {
 
   useEffect(() => {
     ensurePixel();
+    const onConsent = () => ensurePixel();
+    window.addEventListener(COOKIE_CONSENT_EVENT, onConsent);
+    return () => window.removeEventListener(COOKIE_CONSENT_EVENT, onConsent);
   }, []);
 
   useEffect(() => {
@@ -50,19 +60,10 @@ export function MetaPixel() {
         skipFirst = false;
         return;
       }
+      if (readCookieConsent() !== "all") return;
       window.fbq?.("track", "PageView");
     });
   }, [router]);
 
-  return (
-    <noscript>
-      <img
-        height={1}
-        width={1}
-        style={{ display: "none" }}
-        src={`https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1`}
-        alt=""
-      />
-    </noscript>
-  );
+  return null;
 }

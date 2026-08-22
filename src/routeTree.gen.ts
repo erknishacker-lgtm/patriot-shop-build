@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as EntregaEReembolsoRouteImport } from './routes/entrega-e-reembolso'
+import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as A8f3c91e7b2d4f06IndexRouteImport } from './routes/a8f3c91e7b2d4f06/index'
 import { Route as A8f3c91e7b2d4f06EstoqueRouteImport } from './routes/a8f3c91e7b2d4f06/estoque'
@@ -34,6 +36,16 @@ const CarrinhoRoute = CarrinhoRouteImport.update({
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EntregaEReembolsoRoute = EntregaEReembolsoRouteImport.update({
+  id: '/entrega-e-reembolso',
+  path: '/entrega-e-reembolso',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadeRoute = PrivacidadeRouteImport.update({
+  id: '/privacidade',
+  path: '/privacidade',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SobreRoute = SobreRouteImport.update({
@@ -84,6 +96,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
+  '/entrega-e-reembolso': typeof EntregaEReembolsoRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/sobre': typeof SobreRoute
   '/a8f3c91e7b2d4f06/estoque': typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
@@ -97,6 +111,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
+  '/entrega-e-reembolso': typeof EntregaEReembolsoRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/sobre': typeof SobreRoute
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -110,6 +126,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
+  '/entrega-e-reembolso': typeof EntregaEReembolsoRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/sobre': typeof SobreRoute
   '/a8f3c91e7b2d4f06/estoque': typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
@@ -125,6 +143,8 @@ export interface FileRouteTypes {
     | '/'
     | '/carrinho'
     | '/checkout'
+    | '/entrega-e-reembolso'
+    | '/privacidade'
     | '/sobre'
     | '/a8f3c91e7b2d4f06/estoque'
     | '/colecao/mais-vendidas'
@@ -138,6 +158,8 @@ export interface FileRouteTypes {
     | '/'
     | '/carrinho'
     | '/checkout'
+    | '/entrega-e-reembolso'
+    | '/privacidade'
     | '/sobre'
     | '/colecao/mais-vendidas'
     | '/produto/$slug'
@@ -150,6 +172,8 @@ export interface FileRouteTypes {
     | '/'
     | '/carrinho'
     | '/checkout'
+    | '/entrega-e-reembolso'
+    | '/privacidade'
     | '/sobre'
     | '/a8f3c91e7b2d4f06/estoque'
     | '/colecao/mais-vendidas'
@@ -164,6 +188,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CarrinhoRoute: typeof CarrinhoRoute
   CheckoutRoute: typeof CheckoutRoute
+  EntregaEReembolsoRoute: typeof EntregaEReembolsoRoute
+  PrivacidadeRoute: typeof PrivacidadeRoute
   SobreRoute: typeof SobreRoute
   A8f3c91e7b2d4f06EstoqueRoute: typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   ColecaoMaisVendidasRoute: typeof ColecaoMaisVendidasRoute
@@ -192,6 +218,20 @@ declare module '@tanstack/react-router' {
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/entrega-e-reembolso': {
+      id: '/entrega-e-reembolso'
+      path: '/entrega-e-reembolso'
+      fullPath: '/entrega-e-reembolso'
+      preLoaderRoute: typeof EntregaEReembolsoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidade': {
+      id: '/privacidade'
+      path: '/privacidade'
+      fullPath: '/privacidade'
+      preLoaderRoute: typeof PrivacidadeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sobre': {
@@ -275,6 +315,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CarrinhoRoute: CarrinhoRoute,
   CheckoutRoute: CheckoutRoute,
+  EntregaEReembolsoRoute: EntregaEReembolsoRoute,
+  PrivacidadeRoute: PrivacidadeRoute,
   SobreRoute: SobreRoute,
   A8f3c91e7b2d4f06EstoqueRoute: A8f3c91e7b2d4f06EstoqueRouteWithChildren,
   ColecaoMaisVendidasRoute: ColecaoMaisVendidasRoute,

@@ -27,6 +27,21 @@ export function Footer() {
           ))}
         </ul>
 
+        <nav
+          aria-label="Políticas da loja"
+          className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px] font-semibold text-primary-foreground/75"
+        >
+          <Link to="/entrega-e-reembolso" className="hover:text-gold">
+            Entrega e reembolso
+          </Link>
+          <Link to="/privacidade" className="hover:text-gold">
+            Privacidade
+          </Link>
+          <Link to="/sobre" className="hover:text-gold">
+            Sobre
+          </Link>
+        </nav>
+
         <img
           src="/brand/stampabr-wordmark.png"
           alt="Stampabr — camisetas personalizadas"
