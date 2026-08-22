@@ -13,6 +13,8 @@ export type CollectionProduct = {
   rank: number;
   slug?: string;
   to?: string;
+  category?: string;
+  categorySlug?: string;
 };
 
 export const bestSellers: CollectionProduct[] = [

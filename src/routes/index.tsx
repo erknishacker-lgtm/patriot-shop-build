@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ProductPageView } from "@/components/store/ProductPageView";
+import { HomeCatalog } from "@/components/store/HomeCatalog";
 import { StoreEmpty } from "@/components/store/StoreEmpty";
 import { fetchPublishedProducts, toCollectionProduct } from "@/lib/products";
 import { resolveStoreKey } from "@/lib/resolve-store-key";
@@ -9,22 +9,17 @@ export const Route = createFileRoute("/")({
   loader: async () => {
     const storeKey = await resolveStoreKey();
     const catalog = await fetchPublishedProducts(storeKey);
-    const product = catalog[0] ?? null;
-    const related = catalog.slice(1).map(toCollectionProduct);
-    return { product, related, storeKey };
+    return { items: catalog.map(toCollectionProduct), storeKey };
   },
   head: ({ loaderData }) => {
     const store = STORES[loaderData?.storeKey ?? "patriot"];
-    const product = loaderData?.product;
-    const title = product ? `${product.name} | ${store.name}` : store.title;
-    const description = product?.description[0] ?? store.description;
     return {
       meta: [
-        { title },
-        { name: "description", content: description },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:type", content: "product" },
+        { title: store.title },
+        { name: "description", content: store.description },
+        { property: "og:title", content: store.title },
+        { property: "og:description", content: store.description },
+        { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
     };
@@ -33,7 +28,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const { product, related } = Route.useLoaderData();
-  if (!product) return <StoreEmpty />;
-  return <ProductPageView product={product} related={related} />;
+  const { items } = Route.useLoaderData();
+  if (items.length === 0) return <StoreEmpty />;
+  return <HomeCatalog items={items} />;
 }

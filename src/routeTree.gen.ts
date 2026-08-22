@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as A8f3c91e7b2d4f06IndexRouteImport } from './routes/a8f3c91e7b2d4f06/index'
 import { Route as A8f3c91e7b2d4f06EstoqueRouteImport } from './routes/a8f3c91e7b2d4f06/estoque'
 import { Route as ColecaoMaisVendidasRouteImport } from './routes/colecao.mais-vendidas'
@@ -33,6 +34,11 @@ const CarrinhoRoute = CarrinhoRouteImport.update({
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SobreRoute = SobreRouteImport.update({
+  id: '/sobre',
+  path: '/sobre',
   getParentRoute: () => rootRouteImport,
 } as any)
 const A8f3c91e7b2d4f06IndexRoute = A8f3c91e7b2d4f06IndexRouteImport.update({
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
+  '/sobre': typeof SobreRoute
   '/a8f3c91e7b2d4f06/estoque': typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
+  '/sobre': typeof SobreRoute
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/a8f3c91e7b2d4f06': typeof A8f3c91e7b2d4f06IndexRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
+  '/sobre': typeof SobreRoute
   '/a8f3c91e7b2d4f06/estoque': typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   '/colecao/mais-vendidas': typeof ColecaoMaisVendidasRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/'
     | '/carrinho'
     | '/checkout'
+    | '/sobre'
     | '/a8f3c91e7b2d4f06/estoque'
     | '/colecao/mais-vendidas'
     | '/produto/$slug'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/'
     | '/carrinho'
     | '/checkout'
+    | '/sobre'
     | '/colecao/mais-vendidas'
     | '/produto/$slug'
     | '/a8f3c91e7b2d4f06'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/carrinho'
     | '/checkout'
+    | '/sobre'
     | '/a8f3c91e7b2d4f06/estoque'
     | '/colecao/mais-vendidas'
     | '/produto/$slug'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CarrinhoRoute: typeof CarrinhoRoute
   CheckoutRoute: typeof CheckoutRoute
+  SobreRoute: typeof SobreRoute
   A8f3c91e7b2d4f06EstoqueRoute: typeof A8f3c91e7b2d4f06EstoqueRouteWithChildren
   ColecaoMaisVendidasRoute: typeof ColecaoMaisVendidasRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
@@ -179,6 +192,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sobre': {
+      id: '/sobre'
+      path: '/sobre'
+      fullPath: '/sobre'
+      preLoaderRoute: typeof SobreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/a8f3c91e7b2d4f06/': {
@@ -255,6 +275,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CarrinhoRoute: CarrinhoRoute,
   CheckoutRoute: CheckoutRoute,
+  SobreRoute: SobreRoute,
   A8f3c91e7b2d4f06EstoqueRoute: A8f3c91e7b2d4f06EstoqueRouteWithChildren,
   ColecaoMaisVendidasRoute: ColecaoMaisVendidasRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,

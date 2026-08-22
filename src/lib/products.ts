@@ -124,6 +124,8 @@ export function toCollectionProduct(product: ProductRecord): CollectionProduct {
     rank: product.rank,
     slug: product.slug,
     to: `/produto/${product.slug}`,
+    category: product.category,
+    categorySlug: product.categorySlug,
   };
 }
 
