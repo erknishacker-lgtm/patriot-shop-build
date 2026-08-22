@@ -1,15 +1,21 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 import { ProductPageView } from "@/components/store/ProductPageView";
-import { fetchProductBySlug } from "@/lib/products";
+import { fetchProductBySlug, fetchPublishedProducts, toCollectionProduct } from "@/lib/products";
 import { resolveStoreKey } from "@/lib/resolve-store-key";
 import { STORES } from "@/lib/stores";
 
 export const Route = createFileRoute("/produto/$slug")({
   loader: async ({ params }) => {
     const storeKey = await resolveStoreKey();
-    const product = await fetchProductBySlug(params.slug, storeKey);
+    const [product, catalog] = await Promise.all([
+      fetchProductBySlug(params.slug, storeKey),
+      fetchPublishedProducts(storeKey),
+    ]);
     if (!product) throw notFound();
-    return { product, storeKey };
+    const related = catalog
+      .filter((item) => item.slug !== product.slug)
+      .map(toCollectionProduct);
+    return { product, related, storeKey };
   },
   head: ({ loaderData }) => {
     const store = STORES[loaderData?.storeKey ?? "patriot"];
@@ -42,6 +48,6 @@ export const Route = createFileRoute("/produto/$slug")({
 });
 
 function ProdutoSlugPage() {
-  const { product } = Route.useLoaderData();
-  return <ProductPageView product={product} />;
+  const { product, related } = Route.useLoaderData();
+  return <ProductPageView product={product} related={related} />;
 }

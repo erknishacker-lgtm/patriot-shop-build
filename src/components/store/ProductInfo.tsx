@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 
 import { useCart } from "@/hooks/use-cart";
 import { useProduct } from "@/hooks/use-product";
-import { buildYampiCheckoutFromItems } from "@/lib/yampi";
 import { cn } from "@/lib/utils";
 import { PriceBlock } from "./PriceBlock";
 import { ProductRating } from "./ProductRating";
@@ -50,9 +49,6 @@ export function ProductInfo(props: Props) {
   const sizeCheckout =
     product.sizes.find((size) => size.label === selectedSize)?.checkoutUrl?.trim() ?? "";
   const checkoutUrl = sizeCheckout || product.checkoutUrl?.trim() || "";
-  const hasCheckout =
-    Boolean(product.checkoutUrl?.trim()) ||
-    product.sizes.some((size) => Boolean(size.checkoutUrl?.trim()));
 
   const requireSize = () => {
     if (selectedSize) return true;
@@ -79,22 +75,6 @@ export function ProductInfo(props: Props) {
     });
     openCart();
   };
-
-  const handleBuyNow = () => {
-    if (!requireSize() || !selectedSize) return;
-    if (checkoutUrl) {
-      const built = buildYampiCheckoutFromItems([{ checkoutUrl, quantity }]);
-      if ("error" in built) {
-        toast.error(built.error);
-        return;
-      }
-      window.location.href = built.url;
-      return;
-    }
-    handleAddToCart();
-  };
-
-
 
   const oldUnitPrice = product.oldPrice ? product.oldPrice + sizeExtra : null;
 
@@ -153,29 +133,16 @@ export function ProductInfo(props: Props) {
         </div>
       </div>
 
-      <div className="grid gap-2">
-        <Button
-          id="cta-add-cart"
-          variant="brand"
-          size="xl"
-          className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
-          onClick={handleAddToCart}
-        >
-          {added ? <Check className="animate-in zoom-in" /> : <ShoppingCart />}
-          {added ? "ADICIONADO" : "ADICIONAR AO CARRINHO"}
-        </Button>
-        {hasCheckout && (
-          <Button
-            type="button"
-            variant="cta"
-            size="xl"
-            className="w-full text-base tracking-wide"
-            onClick={handleBuyNow}
-          >
-            COMPRAR AGORA
-          </Button>
-        )}
-      </div>
+      <Button
+        id="cta-add-cart"
+        variant="brand"
+        size="xl"
+        className={cn("w-full text-base tracking-wide", added && "scale-[1.01]")}
+        onClick={handleAddToCart}
+      >
+        {added ? <Check className="animate-in zoom-in" /> : <ShoppingCart />}
+        {added ? "ADICIONADO" : "ADICIONAR AO CARRINHO"}
+      </Button>
 
 
 

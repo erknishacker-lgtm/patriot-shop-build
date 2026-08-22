@@ -1,14 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductPageView } from "@/components/store/ProductPageView";
 import { StoreEmpty } from "@/components/store/StoreEmpty";
-import { fetchFeaturedProduct } from "@/lib/products";
+import { fetchPublishedProducts, toCollectionProduct } from "@/lib/products";
 import { resolveStoreKey } from "@/lib/resolve-store-key";
 import { STORES } from "@/lib/stores";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
     const storeKey = await resolveStoreKey();
-    return { product: await fetchFeaturedProduct(storeKey), storeKey };
+    const catalog = await fetchPublishedProducts(storeKey);
+    const product = catalog[0] ?? null;
+    const related = catalog.slice(1).map(toCollectionProduct);
+    return { product, related, storeKey };
   },
   head: ({ loaderData }) => {
     const store = STORES[loaderData?.storeKey ?? "patriot"];
@@ -30,7 +33,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const { product } = Route.useLoaderData();
+  const { product, related } = Route.useLoaderData();
   if (!product) return <StoreEmpty />;
-  return <ProductPageView product={product} />;
+  return <ProductPageView product={product} related={related} />;
 }

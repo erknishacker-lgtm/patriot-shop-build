@@ -122,6 +122,7 @@ export function toCollectionProduct(product: ProductRecord): CollectionProduct {
     maxInstallments: product.maxInstallments,
     inStock: product.stock > 0 && product.sizes.some((s) => s.available),
     rank: product.rank,
+    slug: product.slug,
     to: `/produto/${product.slug}`,
   };
 }

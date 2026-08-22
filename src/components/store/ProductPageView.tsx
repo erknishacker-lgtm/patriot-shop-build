@@ -10,11 +10,19 @@ import { ProductReviews } from "@/components/store/ProductReviews";
 import { ProductSpecifications } from "@/components/store/ProductSpecifications";
 import { StickyBuyBar } from "@/components/store/StickyBuyBar";
 import { StoreLayout } from "@/components/store/StoreLayout";
+import { RelatedProducts } from "@/components/store/RelatedProducts";
 import { TrustBlock } from "@/components/store/TrustBlock";
+import type { CollectionProduct } from "@/data/collections";
 import type { Product } from "@/data/product";
 import { useProduct } from "@/hooks/use-product";
 
-export function ProductPageView({ product }: { product: Product }) {
+export function ProductPageView({
+  product,
+  related = [],
+}: {
+  product: Product;
+  related?: CollectionProduct[];
+}) {
   const state = useProduct(product);
   const ctaRef = useRef<HTMLDivElement>(null);
   const [showSticky, setShowSticky] = useState(false);
@@ -71,6 +79,7 @@ export function ProductPageView({ product }: { product: Product }) {
         </div>
       </div>
 
+      <RelatedProducts items={related} />
       <BenefitsStrip />
       <ProductDescription paragraphs={product.description} />
       <ProductReviews reviews={product.reviews} />
