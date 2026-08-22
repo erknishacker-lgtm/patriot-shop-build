@@ -125,6 +125,22 @@ export function persistStoreCookie(key: StoreKey) {
   document.cookie = `${COOKIE}=${key}; Path=/; Max-Age=86400; SameSite=Lax`;
 }
 
+/** Loja travada neste deploy (Vercel). patriot | lula | marcal */
+function readBuildStore(): string {
+  try {
+    const fromVite = import.meta.env["VITE_STORE"];
+    if (fromVite) return String(fromVite);
+  } catch {
+    /* import.meta pode não existir em algum bundle */
+  }
+  if (typeof process !== "undefined" && process.env["VITE_STORE"]) {
+    return String(process.env["VITE_STORE"]);
+  }
+  return "";
+}
+
+export const BUILD_STORE = parseStoreKey(readBuildStore().toLowerCase().trim());
+
 export function storeFromHost(
   hostname: string,
   search = "",
@@ -137,11 +153,17 @@ export function storeFromHost(
   const host = hostname.toLowerCase();
   if (host === "lula" || host.startsWith("lula.") || host.includes(".lula.")) return "lula";
   if (host.includes("marcal") || host.includes("pablo")) return "marcal";
+  if (host.includes("bolsonaro") || host.includes("clube")) return "patriot";
 
-  const fromCookie = storeFromCookieHeader(cookieHeader ?? (typeof document === "undefined" ? "" : document.cookie));
+  if (BUILD_STORE) return BUILD_STORE;
+
+  const fromCookie = storeFromCookieHeader(
+    cookieHeader ?? (typeof document === "undefined" ? "" : document.cookie),
+  );
   if (fromCookie) return fromCookie;
 
   return "patriot";
 }
 
-export const STORE_BOOT_SCRIPT = `(function(){try{var h=location.hostname.toLowerCase();var q=new URLSearchParams(location.search).get('loja');var c=(document.cookie.match(/(?:^|; )stampabr_loja=(patriot|lula|marcal)/)||[])[1];var s=(q==='lula'||q==='marcal'||q==='patriot')?q:(h==='lula'||h.indexOf('lula.')===0||h.indexOf('.lula.')!==-1)?'lula':(h.indexOf('marcal')!==-1||h.indexOf('pablo')!==-1)?'marcal':(c||'patriot');document.documentElement.setAttribute('data-store',s);if(q==='lula'||q==='marcal'||q==='patriot'){document.cookie='stampabr_loja='+q+'; Path=/; Max-Age=86400; SameSite=Lax';}}catch(e){}})();`;
+const BOOT_BUILD = BUILD_STORE ?? "";
+export const STORE_BOOT_SCRIPT = `(function(){try{var h=location.hostname.toLowerCase();var q=new URLSearchParams(location.search).get('loja');var c=(document.cookie.match(/(?:^|; )stampabr_loja=(patriot|lula|marcal)/)||[])[1];var b=${JSON.stringify(BOOT_BUILD)};var s=(q==='lula'||q==='marcal'||q==='patriot')?q:(h==='lula'||h.indexOf('lula.')===0||h.indexOf('.lula.')!==-1)?'lula':(h.indexOf('marcal')!==-1||h.indexOf('pablo')!==-1)?'marcal':(h.indexOf('bolsonaro')!==-1||h.indexOf('clube')!==-1)?'patriot':(b||c||'patriot');document.documentElement.setAttribute('data-store',s);if(q==='lula'||q==='marcal'||q==='patriot'){document.cookie='stampabr_loja='+q+'; Path=/; Max-Age=86400; SameSite=Lax';}}catch(e){}})();`;
